@@ -1,0 +1,40 @@
+{
+  "name": "stex",
+  "version": "0.1.0",
+  "description": "i18n STrings EXtractor",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/karma start --browsers Firefox --single-run",
+    "testwatch": "./node_modules/.bin/karma start --browsers Firefox",
+    "compile": "tsc index.ts --outDir dist",
+    "minify": "uglifyjs -c -m  -o dist/index.min.js -- dist/index.js",
+    "build": "npm run compile && npm run minify"
+  },
+  "keywords": [
+    "i18n"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ctizen/stex"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "browserify": "^14.4.0",
+    "eslint": "3.13.1",
+    "karma": "1.7.0",
+    "karma-browserify": "^5.1.1",
+    "karma-firefox-launcher": "^1.0.1",
+    "karma-mocha": "^1.3.0",
+    "mocha": "^3.4.2",
+    "ts-node": "^3.2.0",
+    "tslib": "1.5.0",
+    "tslint": "4.3.1",
+    "tslint-eslint-rules": "3.2.3",
+    "typescript": "^2.4.1",
+    "uglify-js": "3.0.18",
+    "watchify": "^3.9.0"
+  },
+  "dependencies": {
+  }
+}
