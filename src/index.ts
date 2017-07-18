@@ -1,6 +1,7 @@
 import * as ts from "typescript";
 import { HTypes, Dict } from './types';
 import { getHandlers } from './handlers';
+export { overridePanic } from './handlers';
 
 let dict: Dict = {};
 let handlers = getHandlers(dict);
@@ -18,7 +19,7 @@ export function extract(sourceFile: ts.SourceFile) {
         for (let c of node.getChildren()) {
           switch (c.kind) {
             case ts.SyntaxKind.PropertyAccessExpression:
-              // TODO: для всех объектов? или ограничить по именам?
+              // no filter by object name, might be useful with transpiled sources
               ident = ((c as ts.PropertyAccessExpression).name as ts.Identifier).text;
               identFile = sourceFile.fileName;
               identLocation = c.getSourceFile().getLineAndCharacterOfPosition(c.getStart()) || { line: 0, character: 0 };
@@ -54,5 +55,7 @@ export function getDict() {
 }
 
 export function clearDict() {
-  dict = {};
+  for (let i in dict) {
+    delete dict[i];
+  }
 }

@@ -44,5 +44,5 @@ export type _npt = (ctx: string, plurals: string[], factor: number, ...args: Sca
 // Mocks, these functions should not be implemented in extractor
 export const _t: _t = (_s, ..._args) => '';
 export const _pt: _pt = (_ctx, _s, ..._args) => '';
-export const _nt: _t = (_plurals, _factor, ..._args) => '';
-export const _npt: _t = (_ctx, _plurals, _factor, ..._args) => '';
+export const _nt: _nt = (_plurals, _factor, ..._args) => '';
+export const _npt: _npt = (_ctx, _plurals, _factor, ..._args) => '';

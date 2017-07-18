@@ -1,6 +1,11 @@
 import * as ts from "typescript";
 import { IdentInfo, I18NEntry, SingleI18NEntry, PluralI18NEntry, Handlers, Dict } from './types';
-import { panic } from './panic';
+import { panic as _panicLog } from './panic';
+
+let panic = _panicLog;
+export function overridePanic(cb: (message: string, info: IdentInfo) => void = _panicLog) {
+  panic = cb;
+}
 
 export const getHandlers: (d: Dict) => Handlers = (d: Dict) => ({
   _t: simpleTranslate(d),
@@ -19,17 +24,55 @@ export const getHandlers: (d: Dict) => Handlers = (d: Dict) => ({
 
 const FIELD_KEY = '^$';
 function makeKey(e: I18NEntry): string {
-    if (e.type === 'single') {
-        return e.entry
-            + (e.context ? FIELD_KEY + e.context : '');
-    }
+  if (e.type === 'single') {
+    return e.entry
+      + (e.context ? FIELD_KEY + e.context : '');
+  }
 
-    if (e.type === 'plural') {
-        return e.entry.join(FIELD_KEY)
-            + (e.context ? FIELD_KEY + e.context : '');
-    }
+  if (e.type === 'plural') {
+    return e.entry.join(FIELD_KEY)
+      + (e.context ? FIELD_KEY + e.context : '');
+  }
 
-    throw new Error('i18n entry type not found');
+  throw new Error('i18n entry type not found');
+}
+
+function filterArgs(args: ts.Node[]): ts.Node[] {
+  // console.log(args.map((a) => a.kind).join(',')); // debug
+  return args.filter((a) => a.kind === ts.SyntaxKind.StringLiteral || isValidQuantifier(a));
+}
+
+function isValidQuantifier(node: ts.Node): boolean {
+  return [
+    ts.SyntaxKind.NumericLiteral,
+    ts.SyntaxKind.Identifier,
+    ts.SyntaxKind.ExpressionStatement,
+    ts.SyntaxKind.PostfixUnaryExpression,
+    ts.SyntaxKind.PrefixUnaryExpression,
+    ts.SyntaxKind.BinaryExpression,
+    ts.SyntaxKind.CallExpression,
+    ts.SyntaxKind.ConditionalExpression
+  ].indexOf(node.kind) !== -1;
+}
+
+function getArrayListNode(node: ts.Node): ts.Node | null {
+  return node.getChildren().reduce(
+    (acc: ts.Node | null, val: ts.Node) => {
+      if (acc || val.kind !== ts.SyntaxKind.SyntaxList) {
+        return acc;
+      }
+      return val;
+    },
+    null
+  );
+}
+
+function getArrayListElements(node: ts.Node): { items: ts.Node[], strings: string[] } {
+  let items: ts.Node[] = node.getChildren().filter((c) => c.kind !== ts.SyntaxKind.CommaToken);
+  let strings: string[] = (items as ts.StringLiteral[])
+    .filter((c: ts.Node) => c.kind === ts.SyntaxKind.StringLiteral)
+    .map((c: ts.StringLiteral) => c.text);
+  return { items, strings };
 }
 
 // Translation parsing handlers
@@ -44,13 +87,7 @@ function simpleTranslate(d: Dict) {
       return;
     }
 
-    const argIdents = args.filter((a) => [
-      ts.SyntaxKind.Identifier,
-      ts.SyntaxKind.StringLiteral,
-      ts.SyntaxKind.NumericLiteral,
-      ts.SyntaxKind.ExpressionStatement
-    ].indexOf(a.kind) !== -1);
-
+    const argIdents = filterArgs(args);
     const argPlaceholders = ((tString as ts.StringLiteral).text.match(/(%\d)/) || []).slice(1);
     if (argIdents.length !== argPlaceholders.length) {
       panic('_t: optional arguments count mismatch', identInfo);
@@ -84,13 +121,7 @@ function contextualTranslate(d: Dict) {
       return;
     }
 
-    const argIdents = args.filter((a) => [
-      ts.SyntaxKind.Identifier,
-      ts.SyntaxKind.StringLiteral,
-      ts.SyntaxKind.NumericLiteral,
-      ts.SyntaxKind.ExpressionStatement
-    ].indexOf(a.kind) !== -1);
-
+    const argIdents = filterArgs(args);
     const argPlaceholders = ((tString as ts.StringLiteral).text.match(/(%\d)/) || []).slice(1);
     if (argIdents.length !== argPlaceholders.length) {
       // TODO check %n match also, what if %1 then %5 in string?
@@ -115,36 +146,32 @@ function pluralTranslate(d: Dict) {
     let [plurals, /* comma */, factor, ...args] = params;
 
     // Checks
-    if (!factor || factor.kind !== ts.SyntaxKind.NumericLiteral) {
-      panic('_nt: parameter #1 (factor) should be a numeric literal', identInfo);
+    if (!factor || !isValidQuantifier(factor)) {
+      panic('_nt: parameter #1 (factor) should be a numeric literal, value or expression', identInfo);
       return;
     }
 
     if (!plurals || plurals.kind !== ts.SyntaxKind.ArrayLiteralExpression) {
-      panic('_nt: parameter #0 (plurality strings) should be a array literal', identInfo);
+      panic('_nt: parameter #0 (plurality strings) should be an array literal', identInfo);
       return;
     }
 
-    let arrayItems: ts.Node[] = plurals.getChildren().filter((c) => c.kind !== ts.SyntaxKind.CommaToken);
-    let arrayStrings: string[] = (arrayItems as ts.StringLiteral[])
-      .filter((c: ts.Node) => c.kind === ts.SyntaxKind.StringLiteral)
-      .map((c: ts.StringLiteral) => c.text);
+    let list = getArrayListNode(plurals);
+    if (!list) {
+      panic('_nt: parameter #0 (plurality strings) should be an array literal', identInfo);
+      return;
+    }
 
-    if (arrayItems.length !== arrayStrings.length) {
+    let { items, strings } = getArrayListElements(list);
+    if (items.length !== strings.length) {
       panic('_nt: parameter #0 (plurality strings) should contain only strings', identInfo);
       return;
     }
 
-    const argIdents = args.filter((a) => [
-      ts.SyntaxKind.Identifier,
-      ts.SyntaxKind.StringLiteral,
-      ts.SyntaxKind.NumericLiteral,
-      ts.SyntaxKind.ExpressionStatement
-    ].indexOf(a.kind) !== -1);
-
+    const argIdents = filterArgs(args);
     let argPlaceholders: { [key: string]: any } = {};
-    for (let sl of arrayStrings) {
-      (sl.match(/(%\d)/) || []).slice(1).forEach((i) => {
+    for (let sl of strings) {
+      (sl.match(/(%\d)/g) || []).forEach((i) => {
         argPlaceholders[i] = true;
       });
     }
@@ -159,7 +186,7 @@ function pluralTranslate(d: Dict) {
 
     const entry: PluralI18NEntry = {
       type: 'plural',
-      entry: arrayStrings,
+      entry: strings,
     }
 
     d[makeKey(entry)] = entry;
@@ -177,8 +204,8 @@ function pluralContextualTranslate(d: Dict) {
       return;
     }
 
-    if (!factor || factor.kind !== ts.SyntaxKind.NumericLiteral) {
-      panic('_npt: parameter #2 (factor) should be a numeric literal', identInfo);
+    if (!factor || !isValidQuantifier(factor)) {
+      panic('_npt: parameter #2 (factor) should be a numeric literal, value or expression', identInfo);
       return;
     }
 
@@ -187,25 +214,22 @@ function pluralContextualTranslate(d: Dict) {
       return;
     }
 
-    let arrayItems: ts.Node[] = plurals.getChildren().filter((c) => c.kind !== ts.SyntaxKind.CommaToken);
-    let arrayStrings: string[] = (arrayItems as ts.StringLiteral[])
-      .filter((c: ts.Node) => c.kind === ts.SyntaxKind.StringLiteral)
-      .map((c: ts.StringLiteral) => c.text);
+    let list = getArrayListNode(plurals);
+    if (!list) {
+      panic('_nt: parameter #0 (plurality strings) should be an array literal', identInfo);
+      return;
+    }
 
-    if (arrayItems.length !== arrayStrings.length) {
+    let { items, strings } = getArrayListElements(list);
+    if (items.length !== strings.length) {
       panic('_npt: parameter #1 (plurality strings) should contain only string literals', identInfo);
       return;
     }
 
-    const argIdents = args.filter((a) => [
-      ts.SyntaxKind.Identifier,
-      ts.SyntaxKind.StringLiteral,
-      ts.SyntaxKind.NumericLiteral,
-      ts.SyntaxKind.ExpressionStatement
-    ].indexOf(a.kind) !== -1);
+    const argIdents = filterArgs(args);
     let argPlaceholders: { [key: string]: any } = {};
-    for (let sl of arrayStrings) {
-      (sl.match(/(%\d)/) || []).slice(1).forEach((i) => {
+    for (let sl of strings) {
+      (sl.match(/(%\d)/g) || []).forEach((i) => {
         argPlaceholders[i] = true;
       });
     }
@@ -220,7 +244,7 @@ function pluralContextualTranslate(d: Dict) {
 
     const entry: PluralI18NEntry = {
       type: 'plural',
-      entry: arrayStrings,
+      entry: strings,
       context: (context as ts.StringLiteral).text
     }
 
