@@ -1,4 +1,3 @@
-import { readFileSync } from "fs";
 import * as ts from "typescript";
 import { HTypes, Dict } from './types';
 import { getHandlers } from './handlers';
@@ -50,9 +49,10 @@ export function extract(sourceFile: ts.SourceFile) {
   }
 }
 
-const fileNames = process.argv.slice(2);
-fileNames.forEach(fileName => {
-  let sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES5, /*setParentNodes */ true);
-  extract(sourceFile);
-  console.log(dict);
-});
+export function getDict() {
+  return dict;
+}
+
+export function clearDict() {
+  dict = {};
+}

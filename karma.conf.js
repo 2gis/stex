@@ -10,31 +10,32 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'browserify'],
+    frameworks: ['karma-typescript', 'mocha', 'browserify'],
 
 
     // list of files / patterns to load in the browser
     files: [
-      'tests/*.js'
+      '**/*.ts'
     ],
 
 
     // list of files to exclude
     exclude: [
+      'node_modules/**/*.ts'
     ],
 
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'tests/*.js': [ 'browserify' ]
+      '**/*.ts': [ 'karma-typescript' ]
     },
 
-    browserify: {
-      debug: true,
-      transform: [ ],
-      insertGlobals: true,
-      insertGlobalVars: ['define', 'it']
+    typescriptPreprocessor: {
+      tsconfigPath: './tsconfig.json',
+      ignorePath: function(path){ 
+       return /\.d\.ts$/.test(path);
+      }
     },
 
     // test results reporter to use

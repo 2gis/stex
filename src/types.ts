@@ -40,3 +40,9 @@ export type _t = (s: string, ...args: Scalar[]) => string;
 export type _pt = (ctx: string, s: string, ...args: Scalar[]) => string;
 export type _nt = (plurals: string[], factor: number, ...args: Scalar[]) => string;
 export type _npt = (ctx: string, plurals: string[], factor: number, ...args: Scalar[]) => string;
+
+// Mocks, these functions should not be implemented in extractor
+export const _t: _t = (_s, ..._args) => '';
+export const _pt: _pt = (_ctx, _s, ..._args) => '';
+export const _nt: _t = (_plurals, _factor, ..._args) => '';
+export const _npt: _t = (_ctx, _plurals, _factor, ..._args) => '';
