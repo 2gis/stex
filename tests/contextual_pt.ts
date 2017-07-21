@@ -26,13 +26,13 @@ describe('Test contextual extraction', () => {
 
   it('Extracts strings with valid simple placeholders', () => {
     function simple() {
-      let a = _pt('ctx', 'Some text %1', 12 + 12); // numeric binary expression
-      a = _pt('ctx', 'Some next text %1', -12); // numeric unary expression
-      a = _pt('ctx', 'Some more next text %1', 12); // numeric literal
-      let b = _pt('ctx', 'Some %1 more text', 'string placeholder'); // string literal
-      let c = _pt('ctx', '%1 more text', a); // variable
-      c = _pt('ctx', '%1 more next text', a ? '123' : '431'); // ternary expression
-      c = _pt('ctx', 'more %1 more', Date.now()); // call expression
+      let a = _pt('ctx', 'Some text %1', [12 + 12]); // numeric binary expression
+      a = _pt('ctx', 'Some next text %1', [-12]); // numeric unary expression
+      a = _pt('ctx', 'Some more next text %1', [12]); // numeric literal
+      let b = _pt('ctx', 'Some %1 more text', ['string placeholder']); // string literal
+      let c = _pt('ctx', '%1 more text', [a]); // variable
+      c = _pt('ctx', '%1 more next text', [a ? '123' : '431']); // ternary expression
+      c = _pt('ctx', 'more %1 more', [Date.now()]); // call expression
       return { a, b, c };
     }
 
@@ -50,9 +50,27 @@ describe('Test contextual extraction', () => {
     assert.equal(extracted[t7].entry, 'more %1 more');
   });
 
+  it('Extracts strings with many placeholders', () => {
+    function simple() {
+      let a = _pt('ctx', 'Some %2 text %1 and %3', [12, 43, '15352']);
+      let b = _pt('ctx', 'Some %1 more %2 text', ['string placeholder', 123]);
+      return { a, b };
+    }
+
+    let extracted = getExtractedStrings(simple);
+    assert.equal(Object.keys(extracted).length, 2);
+    let [t1, t2] = Object.keys(extracted);
+    assert.equal(extracted[t1].type, 'single');
+    assert.equal(extracted[t1].context, 'ctx');
+    assert.equal(extracted[t1].entry, 'Some %2 text %1 and %3');
+    assert.equal(extracted[t2].type, 'single');
+    assert.equal(extracted[t2].context, 'ctx');
+    assert.equal(extracted[t2].entry, 'Some %1 more %2 text');
+  });
+
   it('Fails to extract invalid placeholders', () => {
     function simpleInvalid() {
-      let a = _pt('ctx', 'Some text %1 and more text %2 ololo', 12, 23, 34); // placeholders count mismatch
+      let a = _pt('ctx', 'Some text %1 and more text %2 ololo', [12, 23, 34]); // placeholders count mismatch
       return a;
     }
 

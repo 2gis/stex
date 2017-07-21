@@ -34,15 +34,39 @@ export type IdentInfo = {
 
 export type Dict = { [key: string]: I18NEntry };
 export type Scalar = number | string | null | undefined;
+export type SubstitutionList = Scalar[];
+export type MacroParams = { [key: string]: Scalar };
+export type MacroParamsList = { [key: string]: MacroParams };
 
 // i18n globals
-export type _t = (s: string, ...args: Scalar[]) => string;
-export type _pt = (ctx: string, s: string, ...args: Scalar[]) => string;
-export type _nt = (plurals: string[], factor: number, ...args: Scalar[]) => string;
-export type _npt = (ctx: string, plurals: string[], factor: number, ...args: Scalar[]) => string;
 
 // Mocks, these functions should not be implemented in extractor
-export const _t: _t = (_s, ..._args) => '';
-export const _pt: _pt = (_ctx, _s, ..._args) => '';
-export const _nt: _nt = (_plurals, _factor, ..._args) => '';
-export const _npt: _npt = (_ctx, _plurals, _factor, ..._args) => '';
+export const _t = (
+  _str: string,
+  _substitutions: SubstitutionList = [],
+  _macroParams: MacroParamsList = {}
+) => '';
+export const _pt = (
+  _context: string,
+  _str: string,
+  _substitutions: SubstitutionList = [],
+  _macroParams: MacroParamsList = {}
+) => '';
+export const _nt = (
+  _plurals: string[],
+  _factor: number,
+  _substitutions: SubstitutionList = [],
+  _macroParams: MacroParamsList = {}
+) => '';
+export const _npt = (
+  _context: string,
+  _plurals: string[],
+  _factor: number,
+  _substitutions: SubstitutionList = [],
+  _macroParams: MacroParamsList = {}
+) => '';
+
+export type SimpleTranslation = typeof _t;
+export type ContextualTranslation = typeof _pt;
+export type PluralTranslation = typeof _nt;
+export type PluralContextualTranslation = typeof _npt;

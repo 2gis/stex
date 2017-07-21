@@ -75,11 +75,25 @@ function getArrayListElements(node: ts.Node): { items: ts.Node[], strings: strin
   return { items, strings };
 }
 
+function validatePluralPlaceholders(args: ts.Node | null, strings: string[]) {
+  const argList = args ? getArrayListNode(args) : null;
+  const argIdents = argList ? filterArgs(argList.getChildren()) : [];
+  let argPlaceholders: { [key: string]: any } = {};
+  for (let sl of strings) {
+    (sl.match(/(%\d)/g) || []).forEach((i) => {
+      argPlaceholders[i] = true;
+    });
+  }
+
+  return argIdents.length === Object.keys(argPlaceholders).length;
+}
+
 // Translation parsing handlers
 
 function simpleTranslate(d: Dict) {
   return (params: ts.Node[], identInfo: IdentInfo) => {
-    let [tString, ...args] = params; // args should contain commas + identifiers
+    let [tString, /* comma */, args = null, /* comma */, macros = null] = params;
+    macros = macros;
 
     // Checks
     if (tString.kind != ts.SyntaxKind.StringLiteral) {
@@ -87,8 +101,9 @@ function simpleTranslate(d: Dict) {
       return;
     }
 
-    const argIdents = filterArgs(args);
-    const argPlaceholders = ((tString as ts.StringLiteral).text.match(/(%\d)/) || []).slice(1);
+    const argList = args ? getArrayListNode(args) : null;
+    const argIdents = argList ? filterArgs(argList.getChildren()) : [];
+    const argPlaceholders = (tString as ts.StringLiteral).text.match(/(%\d)/g) || [];
     if (argIdents.length !== argPlaceholders.length) {
       panic('_t: optional arguments count mismatch', identInfo);
       return;
@@ -105,10 +120,10 @@ function simpleTranslate(d: Dict) {
   };
 }
 
-// TODO: eliminate copypaste
 function contextualTranslate(d: Dict) {
   return (params: ts.Node[], identInfo: IdentInfo) => {
-    let [context, /* comma */, tString, ...args] = params;
+    let [context, /* comma */, tString, /* comma */, args = null, /* comma */, macros = null] = params;
+    macros = macros;
 
     // Checks
     if (!context || context.kind !== ts.SyntaxKind.StringLiteral) {
@@ -121,8 +136,9 @@ function contextualTranslate(d: Dict) {
       return;
     }
 
-    const argIdents = filterArgs(args);
-    const argPlaceholders = ((tString as ts.StringLiteral).text.match(/(%\d)/) || []).slice(1);
+    const argList = args ? getArrayListNode(args) : null;
+    const argIdents = argList ? filterArgs(argList.getChildren()) : [];
+    const argPlaceholders = (tString as ts.StringLiteral).text.match(/(%\d)/g) || [];
     if (argIdents.length !== argPlaceholders.length) {
       // TODO check %n match also, what if %1 then %5 in string?
       panic('_pt: optional arguments count mismatch', identInfo);
@@ -143,7 +159,8 @@ function contextualTranslate(d: Dict) {
 
 function pluralTranslate(d: Dict) {
   return (params: ts.Node[], identInfo: IdentInfo) => {
-    let [plurals, /* comma */, factor, ...args] = params;
+    let [plurals, /* comma */, factor, /* comma */, args = null, /* comma */, macros = null] = params;
+    macros = macros;
 
     // Checks
     if (!factor || !isValidQuantifier(factor)) {
@@ -168,15 +185,7 @@ function pluralTranslate(d: Dict) {
       return;
     }
 
-    const argIdents = filterArgs(args);
-    let argPlaceholders: { [key: string]: any } = {};
-    for (let sl of strings) {
-      (sl.match(/(%\d)/g) || []).forEach((i) => {
-        argPlaceholders[i] = true;
-      });
-    }
-
-    if (argIdents.length !== Object.keys(argPlaceholders).length) {
+    if (!validatePluralPlaceholders(args, strings)) {
       // TODO check %n match also, what if %1 then %5 in string?
       panic('_nt: optional arguments count mismatch', identInfo);
       return;
@@ -193,10 +202,10 @@ function pluralTranslate(d: Dict) {
   };
 }
 
-// TODO: eliminate copypaste
 function pluralContextualTranslate(d: Dict) {
   return (params: ts.Node[], identInfo: IdentInfo) => {
-    let [context, /* comma */, plurals, /* comma */, factor, ...args] = params;
+    let [context, /* comma */, plurals, /* comma */, factor, /* comma */, args = null, /* comma */, macros = null] = params;
+    macros = macros;
 
     // Checks
     if (!context || context.kind !== ts.SyntaxKind.StringLiteral) {
@@ -226,15 +235,7 @@ function pluralContextualTranslate(d: Dict) {
       return;
     }
 
-    const argIdents = filterArgs(args);
-    let argPlaceholders: { [key: string]: any } = {};
-    for (let sl of strings) {
-      (sl.match(/(%\d)/g) || []).forEach((i) => {
-        argPlaceholders[i] = true;
-      });
-    }
-
-    if (argIdents.length !== Object.keys(argPlaceholders).length) {
+    if (!validatePluralPlaceholders(args, strings)) {
       // TODO check %n match also, what if %1 then %5 in string?
       panic('_npt: optional arguments count mismatch', identInfo);
       return;

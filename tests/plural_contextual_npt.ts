@@ -34,7 +34,7 @@ describe('Test plural extraction', () => {
         'Some %% %2 more %1 text',
         'Some %% %2 more %1 texts',
         'Some %% %2 more %1 teksty'
-      ], n, n, 'some string');
+      ], n, [n, 'some string']);
       return { a, b };
     }
 
@@ -59,7 +59,7 @@ describe('Test plural extraction', () => {
         'Some text %1 and more text %2 ololo',
         'Some texts %1 and more texts %2 ololo',
         'Some texty %1 and more texty %2 ololo',
-      ], 12, 23, 34, 45); // placeholders count mismatch
+      ], 12, [23, 34, 45]); // placeholders count mismatch
       return a;
     }
 
