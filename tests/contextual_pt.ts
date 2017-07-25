@@ -83,7 +83,7 @@ describe('Test contextual extraction', () => {
   it('Extracts comments', () => {
     const simple = `
       //; Some comment
-      let a = _pt('ctx', 'Some text and more text ololo', []);
+      let a = _pt('ctx', 'Some text and more text ololo');
       return a;
     `;
 
@@ -100,7 +100,7 @@ describe('Test contextual extraction', () => {
     let simpleTsx = `
       let a = <div>
         {/*; Some tsx comment */}
-        {_pt('Some text and more text ololo', [])}
+        {_pt('ctx', 'Some text and more text ololo')}
       </div>;
       return a;
     `;

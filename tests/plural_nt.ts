@@ -91,7 +91,7 @@ describe('Test plural extraction', () => {
     let simpleTsx = `
       let a = <div>
         {/*; Some tsx comment */}
-        {_pt([
+        {_nt([
         'Some text %1 and more text ololo',
         'Some texts %1 and more text ololo',
         'Some texty %1 and more text ololo',

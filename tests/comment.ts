@@ -23,6 +23,20 @@ describe('Test comment extraction edge cases', () => {
     assert.equal(extracted['Some text and more text ololo'].comments[2], 'And third comment too');
   });
 
+  it('Aborts comment parsing if any other line is encountered', () => {
+    let simple = `
+      //; Some comment
+      //; Comment on new line
+      console.log('Translation comment for b should stop here and be empty');
+      let b = _t('Some text for b ololo', []);
+      return [a, b];
+    `;
+
+    let extracted = getExtractedStrings(simple);
+    assert.equal(Object.keys(extracted).length, 1);
+    assert.equal(extracted['Some text for b ololo'].comments.length, 0);
+  });
+
   it('Extracts comments from several translations', () => {
     let simple = `
       //; Some comment

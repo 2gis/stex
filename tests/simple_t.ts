@@ -95,7 +95,7 @@ describe('Test simple extraction', () => {
     let simple = `
       let b;
       //; Some comment
-      let a = _t('Some text and more text ololo', []);
+      let a = _t('Some text and more text ololo');
       return a;
     `;
 
@@ -111,7 +111,7 @@ describe('Test simple extraction', () => {
     let simpleTsx = `
       let a = <div>
         {/*; Some tsx comment */}
-        {_t('Some text and more text ololo', [])}
+        {_t('Some text and more text ololo')}
       </div>;
       return a;
     `;
