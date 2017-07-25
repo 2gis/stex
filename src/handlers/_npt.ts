@@ -11,7 +11,7 @@ import {
 
 // Plural contextual translation
 export function translate(d: Dict) {
-  return (signatureItems: ts.Node[], identInfo: IdentInfo) => {
+  return (signatureItems: ts.Node[], identInfo: IdentInfo, comments: string[]) => {
     let [
       context, /* comma */,
       plurals, /* comma */,
@@ -60,7 +60,8 @@ export function translate(d: Dict) {
       type: 'plural',
       entry: strings,
       context: (context as ts.StringLiteral).text,
-      occurence: identInfo
+      occurence: identInfo,
+      comments
     }
 
     d[makeKey(entry)] = entry;

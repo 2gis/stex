@@ -2,11 +2,14 @@ import * as ts from "typescript";
 import { HTypes, Dict } from './types';
 import { getHandlers } from './handlers';
 export { overridePanic } from './handlers';
+import { CommentHandle } from './commentExtractor';
 
 let dict: Dict = {};
 let handlers = getHandlers(dict);
 
 export function extract(sourceFile: ts.SourceFile) {
+  let commentHandle = (new CommentHandle())
+    .extractRawComments(sourceFile.getFullText(), sourceFile.fileName);
   extractNode(sourceFile);
 
   function extractNode(node: ts.Node) {
@@ -40,7 +43,8 @@ export function extract(sourceFile: ts.SourceFile) {
         if (ident && identFile && identLocation) {
           const handler = handlers[ident as HTypes];
           if (handler) {
-            handler(params || [], { identLocation, identFile });
+            const pos = { identLocation, identFile };
+            handler(params || [], pos, commentHandle.findAdjacentComments(pos));
           }
         }
         break;

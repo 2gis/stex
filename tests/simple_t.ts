@@ -91,12 +91,13 @@ describe('Test simple extraction', () => {
     assert.equal(Object.keys(extracted), 0);
   });
 
-  it('Extracts comments', () => {
-    function simple() {
+  it.only('Extracts comments', () => {
+    let simple = `
+      let b;
       //; Some comment
       let a = _t('Some text and more text ololo', []);
       return a;
-    }
+    `;
 
     let extracted = getExtractedStrings(simple);
     assert.equal(Object.keys(extracted).length, 1);

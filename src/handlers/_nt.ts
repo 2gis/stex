@@ -11,7 +11,7 @@ import {
 
 // Plural translation
 export function translate(d: Dict) {
-  return (signatureItems: ts.Node[], identInfo: IdentInfo) => {
+  return (signatureItems: ts.Node[], identInfo: IdentInfo, comments: string[]) => {
     let [
       plurals, /* comma */,
       factor, /* comma */,
@@ -53,7 +53,8 @@ export function translate(d: Dict) {
     const entry: PluralI18NEntry = {
       type: 'plural',
       entry: strings,
-      occurence: identInfo
+      occurence: identInfo,
+      comments
     }
 
     d[makeKey(entry)] = entry;

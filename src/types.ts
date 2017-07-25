@@ -5,7 +5,7 @@ export type SingleI18NEntry = {
   entry: string;
   context?: string;
   occurence: IdentInfo;
-  comment?: string;
+  comments?: string[];
 };
 
 export type PluralI18NEntry = {
@@ -13,20 +13,20 @@ export type PluralI18NEntry = {
   entry: string[];
   context?: string;
   occurence: IdentInfo;
-  comment?: string;
+  comments?: string[];
 };
 
 export type I18NEntry = SingleI18NEntry | PluralI18NEntry;
 
 export type Handlers = {
-  _t: (params: ts.Node[], identInfo: IdentInfo) => void;
-  _pt: (params: ts.Node[], identInfo: IdentInfo) => void;
-  _nt: (params: ts.Node[], identInfo: IdentInfo) => void;
-  _npt: (params: ts.Node[], identInfo: IdentInfo) => void;
-  _gg: (params: ts.Node[], identInfo: IdentInfo) => void;
-  _pgg: (params: ts.Node[], identInfo: IdentInfo) => void;
-  _ngg: (params: ts.Node[], identInfo: IdentInfo) => void;
-  _npgg: (params: ts.Node[], identInfo: IdentInfo) => void;
+  _t: (params: ts.Node[], identInfo: IdentInfo, comments: string[]) => void;
+  _pt: (params: ts.Node[], identInfo: IdentInfo, comments: string[]) => void;
+  _nt: (params: ts.Node[], identInfo: IdentInfo, comments: string[]) => void;
+  _npt: (params: ts.Node[], identInfo: IdentInfo, comments: string[]) => void;
+  _gg: (params: ts.Node[], identInfo: IdentInfo, comments: string[]) => void;
+  _pgg: (params: ts.Node[], identInfo: IdentInfo, comments: string[]) => void;
+  _ngg: (params: ts.Node[], identInfo: IdentInfo, comments: string[]) => void;
+  _npgg: (params: ts.Node[], identInfo: IdentInfo, comments: string[]) => void;
 };
 
 export type HTypes = keyof Handlers;
