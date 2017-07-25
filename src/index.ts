@@ -51,7 +51,7 @@ export function extract(sourceFile: ts.SourceFile) {
 }
 
 export function getDict() {
-  return dict;
+  return Object.keys(dict).map((key) => dict[key]);;
 }
 
 export function clearDict() {

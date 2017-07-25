@@ -39,5 +39,10 @@
     "uglify-js": "3.0.18",
     "watchify": "^3.9.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@types/cli": "^0.11.19",
+    "@types/glob": "^5.0.30",
+    "cli": "^1.0.1",
+    "glob": "^7.1.2"
+  }
 }
