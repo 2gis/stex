@@ -81,11 +81,11 @@ describe('Test contextual extraction', () => {
   });
 
   it('Extracts comments', () => {
-    function simple() {
+    const simple = `
       //; Some comment
       let a = _pt('ctx', 'Some text and more text ololo', []);
       return a;
-    }
+    `;
 
     let extracted = getExtractedStrings(simple);
     assert.equal(Object.keys(extracted).length, 1);
@@ -93,7 +93,7 @@ describe('Test contextual extraction', () => {
     assert.equal(extracted[t1].type, 'single');
     assert.equal(extracted[t1].context, 'ctx');
     assert.equal(extracted[t1].entry, 'Some text and more text ololo');
-    assert.equal(extracted[t1].comment, 'Some comment');
+    assert.equal(extracted[t1].comments[0], 'Some comment');
   });
 
   it('Extracts TSX comments', () => {
@@ -111,7 +111,7 @@ describe('Test contextual extraction', () => {
     assert.equal(extracted[t1].type, 'single');
     assert.equal(extracted[t1].context, 'ctx');
     assert.equal(extracted[t1].entry, 'Some text and more text ololo');
-    assert.equal(extracted[t1].comment, 'Some tsx comment');
+    assert.equal(extracted[t1].comments[0], 'Some tsx comment');
   });
 
 });

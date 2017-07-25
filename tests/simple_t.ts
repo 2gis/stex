@@ -91,7 +91,7 @@ describe('Test simple extraction', () => {
     assert.equal(Object.keys(extracted), 0);
   });
 
-  it.only('Extracts comments', () => {
+  it('Extracts comments', () => {
     let simple = `
       let b;
       //; Some comment
@@ -104,7 +104,7 @@ describe('Test simple extraction', () => {
     assert.equal(extracted['Some text and more text ololo'].type, 'single');
     assert.equal(extracted['Some text and more text ololo'].context, undefined);
     assert.equal(extracted['Some text and more text ololo'].entry, 'Some text and more text ololo');
-    assert.equal(extracted['Some text and more text ololo'].comment, 'Some comment');
+    assert.equal(extracted['Some text and more text ololo'].comments[0], 'Some comment');
   });
 
   it('Extracts TSX comments', () => {
@@ -121,6 +121,6 @@ describe('Test simple extraction', () => {
     assert.equal(extracted['Some text and more text ololo'].type, 'single');
     assert.equal(extracted['Some text and more text ololo'].context, undefined);
     assert.equal(extracted['Some text and more text ololo'].entry, 'Some text and more text ololo');
-    assert.equal(extracted['Some text and more text ololo'].comment, 'Some tsx comment');
+    assert.equal(extracted['Some text and more text ololo'].comments[0], 'Some tsx comment');
   });
 });

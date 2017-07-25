@@ -53,10 +53,16 @@ export function translate(d: Dict) {
     const entry: PluralI18NEntry = {
       type: 'plural',
       entry: strings,
-      occurence: identInfo,
+      occurences: [identInfo],
       comments
-    }
+    };
+    const key = makeKey(entry);
 
-    d[makeKey(entry)] = entry;
+    if (d[key]) { // have this key -> just append comments & occurences
+      d[key].comments = d[key].comments.concat(entry.comments);
+      d[key].occurences.push(identInfo);
+    } else { // new key -> add it
+      d[key] = entry;
+    }
   };
 }

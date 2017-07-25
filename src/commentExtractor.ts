@@ -22,7 +22,7 @@ export class CommentHandle {
         continue;
       }
 
-      this.addComment(lines[line].replace(/^\s+\/\/;|\s+$/, ''), filename, line); // trim & add
+      this.addComment(lines[line].replace(/^\s+\/\/;\s+|\s+$/, ''), filename, line); // trim & add
     }
 
     return this;
