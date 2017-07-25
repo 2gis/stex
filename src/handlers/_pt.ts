@@ -35,7 +35,8 @@ export function translate(d: Dict) {
     const entry: SingleI18NEntry = {
       type: 'single',
       entry: (tString as ts.StringLiteral).text,
-      context: (context as ts.StringLiteral).text
+      context: (context as ts.StringLiteral).text,
+      occurence: identInfo
     }
 
     d[makeKey(entry)] = entry;

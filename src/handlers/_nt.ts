@@ -53,6 +53,7 @@ export function translate(d: Dict) {
     const entry: PluralI18NEntry = {
       type: 'plural',
       entry: strings,
+      occurence: identInfo
     }
 
     d[makeKey(entry)] = entry;

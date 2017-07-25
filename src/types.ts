@@ -4,12 +4,14 @@ export type SingleI18NEntry = {
   type: 'single';
   entry: string;
   context?: string;
+  occurence: IdentInfo;
 };
 
 export type PluralI18NEntry = {
   type: 'plural';
   entry: string[];
   context?: string;
+  occurence: IdentInfo;
 };
 
 export type I18NEntry = SingleI18NEntry | PluralI18NEntry;
