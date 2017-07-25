@@ -68,5 +68,45 @@ describe('Test plural extraction', () => {
     assert.equal(errors.length, 1);
     assert.equal(Object.keys(extracted), 0);
   });
+
+  it('Extracts comments', () => {
+    function simple() {
+      //; Some comment
+      let a = _npt('ctx', [
+        'Some text %1 and more text ololo',
+        'Some texts %1 and more text ololo',
+        'Some texty %1 and more text ololo',
+      ], 11, []);
+      return a;
+    }
+
+    let extracted = getExtractedStrings(simple);
+    assert.equal(Object.keys(extracted).length, 1);
+    let [t1] = Object.keys(extracted);
+    assert.equal(extracted[t1].type, 'plural');
+    assert.equal(extracted[t1].context, 'ctx');
+    assert.equal(extracted[t1].comment, 'Some comment');
+  });
+
+  it('Extracts TSX comments', () => {
+    let simpleTsx = `
+      let a = <div>
+        {/*; Some tsx comment */}
+        {_npt('ctx', [
+        'Some text %1 and more text ololo',
+        'Some texts %1 and more text ololo',
+        'Some texty %1 and more text ololo',
+      ], 11, [])}
+      </div>;
+      return a;
+    `;
+
+    let extracted = getExtractedStrings(simpleTsx);
+    assert.equal(Object.keys(extracted).length, 1);
+    let [t1] = Object.keys(extracted);
+    assert.equal(extracted[t1].type, 'plural');
+    assert.equal(extracted[t1].context, 'ctx');
+    assert.equal(extracted[t1].comment, 'Some tsx comment');
+  });
 });
 

@@ -3,7 +3,7 @@ import { getExtractedStrings } from './util';
 import { IdentInfo, _nt } from '../src/types';
 
 describe('Test plural extraction', () => {
-  it.only('Extracts plural strings', () => {
+  it('Extracts plural strings', () => {
     function simple() {
       let n = 1;
       let a = _nt(['Some text', 'Some texts', 'Some teksty'], n);
@@ -67,6 +67,44 @@ describe('Test plural extraction', () => {
     let extracted = getExtractedStrings(simpleInvalid, (m: string, _i: IdentInfo) => { errors.push(m); });
     assert.equal(errors.length, 1);
     assert.equal(Object.keys(extracted), 0);
+  });
+
+  it('Extracts comments', () => {
+    function simple() {
+      //; Some comment
+      let a = _nt([
+        'Some text %1 and more text ololo',
+        'Some texts %1 and more text ololo',
+        'Some texty %1 and more text ololo',
+      ], 11, []);
+      return a;
+    }
+
+    let extracted = getExtractedStrings(simple);
+    assert.equal(Object.keys(extracted).length, 1);
+    let [t1] = Object.keys(extracted);
+    assert.equal(extracted[t1].type, 'plural');
+    assert.equal(extracted[t1].comment, 'Some comment');
+  });
+
+  it('Extracts TSX comments', () => {
+    let simpleTsx = `
+      let a = <div>
+        {/*; Some tsx comment */}
+        {_pt([
+        'Some text %1 and more text ololo',
+        'Some texts %1 and more text ololo',
+        'Some texty %1 and more text ololo',
+      ], 11, [])}
+      </div>;
+      return a;
+    `;
+
+    let extracted = getExtractedStrings(simpleTsx);
+    assert.equal(Object.keys(extracted).length, 1);
+    let [t1] = Object.keys(extracted);
+    assert.equal(extracted[t1].type, 'plural');
+    assert.equal(extracted[t1].comment, 'Some tsx comment');
   });
 });
 

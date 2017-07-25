@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from 'fs';
 import * as ts from "typescript";
-import { extract, getDict } from '../src';
+import { extract, getDictItems } from '../src';
 import * as glob from 'glob';
 import * as cli from 'cli';
 
@@ -42,8 +42,8 @@ glob(options.src, (e: Error, matches: string[]) => {
   });
 
   if (options.output === '__stdout') {
-    console.log(JSON.stringify(getDict(), undefined, '  '));
+    console.log(JSON.stringify(getDictItems(), undefined, '  '));
   } else {
-    writeFileSync(options.output, JSON.stringify(getDict(), undefined, '  '));
+    writeFileSync(options.output, JSON.stringify(getDictItems(), undefined, '  '));
   }
 });

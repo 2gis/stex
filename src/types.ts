@@ -5,6 +5,7 @@ export type SingleI18NEntry = {
   entry: string;
   context?: string;
   occurence: IdentInfo;
+  comment?: string;
 };
 
 export type PluralI18NEntry = {
@@ -12,6 +13,7 @@ export type PluralI18NEntry = {
   entry: string[];
   context?: string;
   occurence: IdentInfo;
+  comment?: string;
 };
 
 export type I18NEntry = SingleI18NEntry | PluralI18NEntry;

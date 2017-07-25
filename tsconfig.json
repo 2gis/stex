@@ -11,7 +11,7 @@
     "noEmitHelpers": true,
     "importHelpers": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "noUnusedParameters": true,
   },
   "exclude": [
     "node_modules"

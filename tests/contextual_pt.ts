@@ -79,5 +79,40 @@ describe('Test contextual extraction', () => {
     assert.equal(errors.length, 1);
     assert.equal(Object.keys(extracted), 0);
   });
+
+  it('Extracts comments', () => {
+    function simple() {
+      //; Some comment
+      let a = _pt('ctx', 'Some text and more text ololo', []);
+      return a;
+    }
+
+    let extracted = getExtractedStrings(simple);
+    assert.equal(Object.keys(extracted).length, 1);
+    let [t1] = Object.keys(extracted);
+    assert.equal(extracted[t1].type, 'single');
+    assert.equal(extracted[t1].context, 'ctx');
+    assert.equal(extracted[t1].entry, 'Some text and more text ololo');
+    assert.equal(extracted[t1].comment, 'Some comment');
+  });
+
+  it('Extracts TSX comments', () => {
+    let simpleTsx = `
+      let a = <div>
+        {/*; Some tsx comment */}
+        {_pt('Some text and more text ololo', [])}
+      </div>;
+      return a;
+    `;
+
+    let extracted = getExtractedStrings(simpleTsx);
+    assert.equal(Object.keys(extracted).length, 1);
+    let [t1] = Object.keys(extracted);
+    assert.equal(extracted[t1].type, 'single');
+    assert.equal(extracted[t1].context, 'ctx');
+    assert.equal(extracted[t1].entry, 'Some text and more text ololo');
+    assert.equal(extracted[t1].comment, 'Some tsx comment');
+  });
+
 });
 

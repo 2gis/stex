@@ -91,44 +91,35 @@ describe('Test simple extraction', () => {
     assert.equal(Object.keys(extracted), 0);
   });
 
-  it.skip('Fails to extract invalid count of macro placeholders', () => {
-    function simpleInvalid() {
-      let a = _t(
-        'Some text %{Macro param1} and more text %{Macro param2} ololo', [],
-        {
-          Macro: {
-            param1: 'test',
-            param2: 'test',
-            param3: 'test'
-          }
-        }
-      ); // placeholders count mismatch
+  it('Extracts comments', () => {
+    function simple() {
+      //; Some comment
+      let a = _t('Some text and more text ololo', []);
       return a;
     }
 
-    let errors: string[] = [];
-    let extracted = getExtractedStrings(simpleInvalid, (m: string, _i: IdentInfo) => { errors.push(m); });
-    assert.equal(errors.length, 1);
-    assert.equal(Object.keys(extracted), 0);
+    let extracted = getExtractedStrings(simple);
+    assert.equal(Object.keys(extracted).length, 1);
+    assert.equal(extracted['Some text and more text ololo'].type, 'single');
+    assert.equal(extracted['Some text and more text ololo'].context, undefined);
+    assert.equal(extracted['Some text and more text ololo'].entry, 'Some text and more text ololo');
+    assert.equal(extracted['Some text and more text ololo'].comment, 'Some comment');
   });
 
-  it.skip('Fails to extract invalid params of macro placeholders', () => {
-    function simpleInvalid() {
-      let a = _t(
-        'Some text %{Macro param1} and more text %{Macro param2} ololo', [],
-        {
-          Macro: {
-            paramA: 'test',
-            paramB: 'test'
-          }
-        }
-      ); // placeholders count mismatch
+  it('Extracts TSX comments', () => {
+    let simpleTsx = `
+      let a = <div>
+        {/*; Some tsx comment */}
+        {_t('Some text and more text ololo', [])}
+      </div>;
       return a;
-    }
+    `;
 
-    let errors: string[] = [];
-    let extracted = getExtractedStrings(simpleInvalid, (m: string, _i: IdentInfo) => { errors.push(m); });
-    assert.equal(errors.length, 1);
-    assert.equal(Object.keys(extracted), 0);
+    let extracted = getExtractedStrings(simpleTsx);
+    assert.equal(Object.keys(extracted).length, 1);
+    assert.equal(extracted['Some text and more text ololo'].type, 'single');
+    assert.equal(extracted['Some text and more text ololo'].context, undefined);
+    assert.equal(extracted['Some text and more text ololo'].entry, 'Some text and more text ololo');
+    assert.equal(extracted['Some text and more text ololo'].comment, 'Some tsx comment');
   });
 });
