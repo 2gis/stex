@@ -54,6 +54,7 @@ export function translate(d: Dict) {
       type: 'plural',
       entry: strings,
       occurences: [identInfo],
+      translations: [],
       comments
     };
     const key = makeKey(entry);

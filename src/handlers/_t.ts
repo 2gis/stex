@@ -29,6 +29,7 @@ export function translate(d: Dict) {
       type: 'single',
       entry: (tString as ts.StringLiteral).text,
       occurences: [identInfo],
+      translations: [],
       comments
     };
     const key = makeKey(entry);
