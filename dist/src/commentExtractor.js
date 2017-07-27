@@ -13,12 +13,12 @@ var CommentHandle = (function () {
     CommentHandle.prototype.extractRawComments = function (src, filename) {
         var lines = src.split("\n"); // No regex here! We should precisely keep line numbers.
         for (var line = 0; line < lines.length; line++) {
-            if (lines[line].match(/^\s*\/\/;/)) {
-                this.addComment(lines[line].replace(/^\s*\/\/;\s*|\s*$/g, ''), filename, line); // trim & add
+            if (lines[line].match(/^\s*\/\/\s?;/)) {
+                this.addComment(lines[line].replace(/^\s*\/\/\s?;\s*|\s*$/g, ''), filename, line); // trim & add
                 continue;
             }
-            if (lines[line].match(/^\s*\{?\s*\/\*;(.+?)\s*\*\/\s*\}?\s*$/)) {
-                this.addComment(lines[line].replace(/^\s*\{?\s*\/\*;\s*|\s*\*\/\s*\}?\s*$/g, ''), filename, line); // trim & add
+            if (lines[line].match(/^\s*\{?\s*\/\*\s?;(.+?)\s*\*\/\s*\}?\s*$/)) {
+                this.addComment(lines[line].replace(/^\s*\{?\s*\/\*\s?;\s*|\s*\*\/\s*\}?\s*$/g, ''), filename, line); // trim & add
                 continue;
             }
         }

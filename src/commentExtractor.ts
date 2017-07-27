@@ -18,13 +18,13 @@ export class CommentHandle {
   public extractRawComments(src: string, filename: string): CommentHandle {
     let lines = src.split("\n"); // No regex here! We should precisely keep line numbers.
     for (let line = 0; line < lines.length; line++) {
-      if (lines[line].match(/^\s*\/\/;/)) { // single line //; comments
-        this.addComment(lines[line].replace(/^\s*\/\/;\s*|\s*$/g, ''), filename, line); // trim & add
+      if (lines[line].match(/^\s*\/\/\s?;/)) { // single line //; or // ; comments
+        this.addComment(lines[line].replace(/^\s*\/\/\s?;\s*|\s*$/g, ''), filename, line); // trim & add
         continue;
       }
 
-      if (lines[line].match(/^\s*\{?\s*\/\*;(.+?)\s*\*\/\s*\}?\s*$/)) { // single line /*; comments */, also support {} for TSX
-        this.addComment(lines[line].replace(/^\s*\{?\s*\/\*;\s*|\s*\*\/\s*\}?\s*$/g, ''), filename, line); // trim & add
+      if (lines[line].match(/^\s*\{?\s*\/\*\s?;(.+?)\s*\*\/\s*\}?\s*$/)) { // single line /*; comments */, also support {} for TSX
+        this.addComment(lines[line].replace(/^\s*\{?\s*\/\*\s?;\s*|\s*\*\/\s*\}?\s*$/g, ''), filename, line); // trim & add
         continue;
       }
     }
