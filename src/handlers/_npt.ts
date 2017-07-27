@@ -7,7 +7,8 @@ import {
   makeKey,
   getArrayListNode,
   getArrayListElements,
-  isValidQuantifier
+  isValidQuantifier,
+  addToDict,
 } from '../utils';
 
 // Plural contextual translation
@@ -61,18 +62,12 @@ export function translate(d: Dict) {
       type: 'plural',
       entry: strings,
       context: (context as ts.StringLiteral).text,
-      occurences: [identInfo],
+      occurences: [], // will be filled within addToDict
       translations: [],
       comments
     };
-    const key = makeKey(entry);
 
-    if (d[key]) { // have this key -> just append comments & occurences; comments should be deduplicated
-      d[key].comments = d[key].comments.concat(entry.comments)
-        .filter((value, index, self) => self.indexOf(value) === index);
-      d[key].occurences.push(identInfo);
-    } else { // new key -> add it
-      d[key] = entry;
-    }
+    const key = makeKey(entry);
+    addToDict(d, key, entry, identInfo);
   };
 }

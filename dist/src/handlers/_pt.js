@@ -26,19 +26,12 @@ function translate(d) {
             type: 'single',
             entry: tString.text,
             context: context.text,
-            occurences: [identInfo],
+            occurences: [],
             translations: [],
             comments: comments
         };
         var key = utils_1.makeKey(entry);
-        if (d[key]) {
-            d[key].comments = d[key].comments.concat(entry.comments)
-                .filter(function (value, index, self) { return self.indexOf(value) === index; });
-            d[key].occurences.push(identInfo);
-        }
-        else {
-            d[key] = entry;
-        }
+        utils_1.addToDict(d, key, entry, identInfo);
     };
 }
 exports.translate = translate;

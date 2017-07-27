@@ -69,3 +69,16 @@ function validateSinglePlaceholder(args, tString) {
     return argIdents.length === argPlaceholders.length;
 }
 exports.validateSinglePlaceholder = validateSinglePlaceholder;
+function addToDict(d, key, entry, occurence) {
+    if (d[key]) {
+        d[key].comments = d[key].comments.concat(entry.comments)
+            .filter(function (value, index, self) { return self.indexOf(value) === index; });
+    }
+    else {
+        d[key] = entry;
+    }
+    d[key].occurences.push(
+    // +1 to char & line, because they're counted from 0 inside
+    occurence.identFile + ":" + (occurence.identLocation.line + 1) + ":" + (occurence.identLocation.character + 1));
+}
+exports.addToDict = addToDict;

@@ -1,5 +1,6 @@
 import * as ts from "typescript";
-import { I18NEntry } from 'i18n-proto';
+import { I18NEntry, IdentInfo } from 'i18n-proto';
+import { Dict } from './types';
 
 const FIELD_KEY = '^$';
 export function makeKey(e: I18NEntry): string {
@@ -72,4 +73,18 @@ export function validateSinglePlaceholder(args: ts.Node | null, tString: ts.Stri
   const argIdents = argList ? filterArgs(argList.getChildren()) : [];
   const argPlaceholders = tString.text.match(/(%\d)/g) || [];
   return argIdents.length === argPlaceholders.length;
+}
+
+export function addToDict(d: Dict, key: string, entry: I18NEntry, occurence: IdentInfo) {
+  if (d[key]) { // have this key -> just append comments & occurences; comments should be deduplicated
+    d[key].comments = d[key].comments.concat(entry.comments)
+      .filter((value, index, self) => self.indexOf(value) === index);
+  } else { // new key -> add it
+    d[key] = entry;
+  }
+
+  d[key].occurences.push(
+    // +1 to char & line, because they're counted from 0 inside
+    `${occurence.identFile}:${occurence.identLocation.line + 1}:${occurence.identLocation.character + 1}`
+  );
 }
