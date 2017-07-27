@@ -40,7 +40,7 @@ export function extract(sourceFile: ts.SourceFile) {
           }
         }
 
-        if (ident && identFile && identLocation) {
+        if (ident && identFile && identLocation && handlers.hasOwnProperty(ident)) {
           const handler = handlers[ident as HTypes];
           if (handler) {
             const pos = { identLocation, identFile };

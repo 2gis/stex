@@ -39,7 +39,7 @@ function extract(sourceFile) {
                             ts.forEachChild(node, extractNode);
                     }
                 }
-                if (ident && identFile && identLocation) {
+                if (ident && identFile && identLocation && handlers.hasOwnProperty(ident)) {
                     var handler = handlers[ident];
                     if (handler) {
                         var pos = { identLocation: identLocation, identFile: identFile };
