@@ -21,6 +21,28 @@ describe('Test simple extraction', () => {
     assert.equal(extracted['Some more text'].entry, 'Some more text');
   });
 
+  it('Extracts strings from complex syntax context', () => {
+    function simple() {
+      let i18n = { _t };
+      function func(_a: any) { return a; }
+      let a = func({
+        k0: 'some untranslated',
+        k1: i18n._t('Some text'),
+        k2: i18n._t('Some more text')
+      });
+      return a;
+    }
+
+    let extracted = getExtractedStrings(simple);
+    assert.equal(Object.keys(extracted).length, 2);
+    assert.equal(extracted['Some text'].type, 'single');
+    assert.equal(extracted['Some text'].context, undefined);
+    assert.equal(extracted['Some text'].entry, 'Some text');
+    assert.equal(extracted['Some more text'].type, 'single');
+    assert.equal(extracted['Some more text'].context, undefined);
+    assert.equal(extracted['Some more text'].entry, 'Some more text');
+  });
+
   it('Extracts strings with valid simple placeholders of different types', () => {
     function simple() {
       let a = _t('Some text %1', [12 + 12]); // numeric binary expression

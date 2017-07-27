@@ -35,8 +35,7 @@ export function extract(sourceFile: ts.SourceFile) {
             case ts.SyntaxKind.SyntaxList:
               params = c.getChildren();
               break;
-            default:
-              ts.forEachChild(node, extractNode);
+            default: ;
           }
         }
 
@@ -46,6 +45,8 @@ export function extract(sourceFile: ts.SourceFile) {
             const pos = { identLocation, identFile };
             handler(params || [], pos, commentHandle.findAdjacentComments(pos));
           }
+        } else {
+          ts.forEachChild(node, extractNode);
         }
         break;
       default:

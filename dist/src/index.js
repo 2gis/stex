@@ -35,8 +35,7 @@ function extract(sourceFile) {
                         case ts.SyntaxKind.SyntaxList:
                             params = c.getChildren();
                             break;
-                        default:
-                            ts.forEachChild(node, extractNode);
+                        default: ;
                     }
                 }
                 if (ident && identFile && identLocation && handlers.hasOwnProperty(ident)) {
@@ -45,6 +44,9 @@ function extract(sourceFile) {
                         var pos = { identLocation: identLocation, identFile: identFile };
                         handler(params || [], pos, commentHandle.findAdjacentComments(pos));
                     }
+                }
+                else {
+                    ts.forEachChild(node, extractNode);
                 }
                 break;
             default:
