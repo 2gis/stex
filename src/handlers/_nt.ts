@@ -1,5 +1,6 @@
 import * as ts from "typescript";
-import { IdentInfo, PluralI18NEntry, Dict } from '../types';
+import { IdentInfo, PluralI18NEntry } from 'i18n-proto';
+import { Dict } from '../types';
 import { panic } from './';
 import {
   validatePluralPlaceholders,

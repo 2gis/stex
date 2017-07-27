@@ -1,5 +1,5 @@
 import * as ts from "typescript";
-import { I18NEntry } from './types';
+import { I18NEntry } from 'i18n-proto';
 
 const FIELD_KEY = '^$';
 export function makeKey(e: I18NEntry): string {

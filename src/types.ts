@@ -1,24 +1,5 @@
 import * as ts from "typescript";
-
-export type SingleI18NEntry = {
-  type: 'single';
-  entry: string;
-  context?: string;
-  occurences: IdentInfo[];
-  comments?: string[];
-  translations: string[];
-};
-
-export type PluralI18NEntry = {
-  type: 'plural';
-  entry: string[];
-  context?: string;
-  occurences: IdentInfo[];
-  comments?: string[];
-  translations: string[];
-};
-
-export type I18NEntry = SingleI18NEntry | PluralI18NEntry;
+import { IdentInfo, I18NEntry } from 'i18n-proto';
 
 export type Handlers = {
   _t: (params: ts.Node[], identInfo: IdentInfo, comments: string[]) => void;
@@ -32,12 +13,6 @@ export type Handlers = {
 };
 
 export type HTypes = keyof Handlers;
-
-export type IdentInfo = {
-  identLocation: { line: number, character: number };
-  identFile: string;
-};
-
 export type Dict = { [key: string]: I18NEntry };
 export type Scalar = number | string | null | undefined;
 export type SubstitutionList = Scalar[];

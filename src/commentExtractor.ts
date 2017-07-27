@@ -1,4 +1,4 @@
-import { IdentInfo } from './types';
+import { IdentInfo } from 'i18n-proto';
 
 export class CommentHandle {
   private comments: {

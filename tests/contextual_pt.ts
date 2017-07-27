@@ -1,7 +1,8 @@
 import * as assert from 'assert';
 import { getExtractedStrings } from './util';
 import { overridePanic } from '../src/';
-import { IdentInfo, _pt } from '../src/types';
+import { IdentInfo } from 'i18n-proto';
+import { _pt } from '../src/types';
 
 describe('Test contextual extraction', () => {
   beforeEach(() => overridePanic());

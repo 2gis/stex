@@ -1,4 +1,4 @@
-import { IdentInfo } from './types';
+import { IdentInfo } from 'i18n-proto';
 
 const __reset = "\x1b[0m";
 const __fgRed = "\x1b[31m";

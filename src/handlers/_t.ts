@@ -1,5 +1,6 @@
 import * as ts from "typescript";
-import { IdentInfo, SingleI18NEntry, Dict } from '../types';
+import { IdentInfo, SingleI18NEntry } from 'i18n-proto';
+import { Dict } from '../types';
 import { validateSinglePlaceholder, makeKey, } from '../utils';
 import { panic } from './';
 

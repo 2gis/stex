@@ -1,6 +1,7 @@
 import * as assert from 'assert';
 import { getExtractedStrings } from './util';
-import { IdentInfo, _t } from '../src/types';
+import { IdentInfo } from 'i18n-proto';
+import { _t } from '../src/types';
 
 describe('Test simple extraction', () => {
   it('Extracts strings', () => {

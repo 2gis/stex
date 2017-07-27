@@ -1,6 +1,7 @@
 import * as assert from 'assert';
 import { getExtractedStrings } from './util';
-import { IdentInfo, _t } from '../src/types';
+import { _t } from '../src/types';
+import { IdentInfo } from 'i18n-proto';
 
 describe('Test comment extraction edge cases', () => {
   it('Extracts multiline comments', () => {

@@ -1,5 +1,6 @@
 import * as ts from "typescript";
-import { IdentInfo, Handlers, Dict } from '../types';
+import { IdentInfo } from 'i18n-proto';
+import { Handlers, Dict } from '../types';
 import { panic as _panicLog } from '../panic';
 import { translate as simpleTranslate } from './_t';
 import { translate as contextualTranslate } from './_pt';

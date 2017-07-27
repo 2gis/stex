@@ -1,6 +1,7 @@
 import * as assert from 'assert';
 import { getExtractedStrings } from './util';
-import { IdentInfo, _npt } from '../src/types';
+import { IdentInfo } from 'i18n-proto';
+import { _npt } from '../src/types';
 
 describe('Test plural extraction', () => {
   it('Extracts same plural strings with different contexts', () => {
