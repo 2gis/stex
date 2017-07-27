@@ -1,3 +1,7 @@
 #!/bin/sh
 
-./node_modules/.bin/ts-node bin/cli.ts "$@"
+if [ ! -f dist/bin/cli.js ]; then
+    npm run build
+fi
+
+node dist/bin/cli.js "$@"

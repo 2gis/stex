@@ -1,22 +1,19 @@
 {
-  "name": "stex",
-  "version": "0.1.0",
+  "name": "i18n-stex",
+  "version": "1.0.0",
   "description": "i18n STrings EXtractor",
-  "main": "index.js",
-  "typings": "project.d.ts",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "./node_modules/.bin/karma start --browsers Firefox --single-run",
-    "testwatch": "./node_modules/.bin/karma start --browsers Firefox",
-    "compile": "tsc index.ts --outDir dist",
-    "minify": "uglifyjs -c -m  -o dist/index.min.js -- dist/index.js",
-    "build": "npm run compile && npm run minify"
+    "test": "karma start --browsers Firefox --single-run",
+    "testwatch": "karma start --browsers Firefox",
+    "build": "tsc bin/cli.ts --outDir dist"
   },
   "keywords": [
     "i18n"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ctizen/stex"
+    "url": "https://github.com/2gis/stex"
   },
   "author": "",
   "license": "MIT",
