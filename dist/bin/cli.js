@@ -15,7 +15,7 @@ if (options.help) {
     console.log("i18n STring EXtractor\n\nOptions:\n   -h / --help          Show this help\n   -s / --src '*.ts'    Define which files should be processed. \n                        Accepts quoted glob string.\n   -o / --output FILE   Define output JSON file name. If a file \n                        already exists, it's contents will be\n                        overwritten.");
     process.exit(0);
 }
-console.log('Running extraction in glob: ', options.src);
+console.warn('Running extraction in glob: ', options.src);
 glob(options.src, function (e, matches) {
     if (e) {
         console.error(e);

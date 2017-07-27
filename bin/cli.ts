@@ -24,7 +24,7 @@ Options:
   process.exit(0);
 }
 
-console.log('Running extraction in glob: ', options.src);
+console.warn('Running extraction in glob: ', options.src);
 
 glob(options.src, (e: Error, matches: string[]) => {
   if (e) {
