@@ -1,6 +1,6 @@
 {
   "name": "i18n-stex",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "i18n STrings EXtractor",
   "main": "dist/index.js",
   "scripts": {
@@ -14,6 +14,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/2gis/stex"
+  },
+  "bin": {
+    "stex": "./bin/stex"
   },
   "author": "",
   "license": "MIT",
