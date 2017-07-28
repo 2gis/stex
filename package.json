@@ -1,6 +1,6 @@
 {
   "name": "i18n-stex",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "i18n STrings EXtractor",
   "main": "dist/index.js",
   "scripts": {
@@ -21,6 +21,8 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@types/cli": "^0.11.19",
+    "@types/glob": "^5.0.30",
     "@types/assert": "^0.0.31",
     "@types/node": "^8.0.14",
     "browserify": "^14.4.0",
@@ -41,8 +43,6 @@
     "watchify": "^3.9.0"
   },
   "dependencies": {
-    "@types/cli": "^0.11.19",
-    "@types/glob": "^5.0.30",
     "cli": "^1.0.1",
     "glob": "^7.1.2"
   }
