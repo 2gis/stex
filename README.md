@@ -3,6 +3,40 @@ i18n STrings EXtractor
 
 Stex is an utility to extract i18n strings from JS & TS source code. It's written in Typescript and is distributed as standalone package.
 
+## How it works
+
+Stex walks through all files and traverses their ASTs with typescript API searching for any of these function or method calls:
+- `_t('Simple translation')`
+- `_pt('Context', 'Contextual translation')`
+- `_nt(['Plural translation', 'Plural translations'], pluralityFactor)`
+- `_npt('Context', ['Contextual plural translation', 'Contextual plural translations'], pluralityFactor)`
+
+`pluralityFactor` is a numeric literal, variable or expression, evaluating as number, which is used to determine which plural form should be used in runtime. This logic is not implemented in stex, but it should know about it to provide consistent interface.
+
+Any of `_t`, `_pt`, `_nt` and `_npt` may have additional parameters, which will be substituted into strings. Example:
+```
+_t('This translation is %1', 'simple') // Should output "This translation is simple" in runtime
+```
+Again, this logic is not implemented in stex, but on parsing stage it checks if count of substitution markers matches count of additional parameters and throws an error on mismatch.
+
+Plural `_nt` and `_npt` calls may also have a `%%` substitution marker, which should be replaced with `pluralityFactor` value in runtime.
+
+i18n calls may be imported as object, and stex will still recognize it: for example, `$i18n._t('Something')` is fine.
+
+Stex also extracts comments for translators. Such comments should be strictly on previous line relative to i18n call and should begin with `// ;` or `/* ;`. Multiline translation comments are not allowed, but stacking single-line comments are allowed, like this:
+```
+// ; This is some text
+// ; This line of comment will also get into translation file
+_t('Some text')
+```
+
+## Output data expectations
+
+- All i18n strings are extracted as i18n entries.
+- Entries are deduplicated using `context`+`string` as a key, so many occurences of same string will be treated as one in translation file.
+- Comments are deduplicated by content, but if different comments are provided for same entry, they will be merged together.
+- String occurence places are also saved within output data in format of `fileName:lineNumber:character`.
+
 ## Command-line usage
 
 To install stex system-wide, run:
