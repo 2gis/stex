@@ -34,7 +34,7 @@ function translate(d) {
         // All ok, add to dict
         var entry = {
             type: 'plural',
-            entry: strings,
+            entry: [strings[0], strings[strings.length - 1]],
             occurences: [],
             translations: [],
             comments: comments

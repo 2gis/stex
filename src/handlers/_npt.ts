@@ -60,7 +60,7 @@ export function translate(d: Dict) {
 
     const entry: PluralI18NEntry = {
       type: 'plural',
-      entry: strings,
+      entry: [strings[0], strings[strings.length - 1]], // plural entries are identified by first and last forms
       context: (context as ts.StringLiteral).text,
       occurences: [], // will be filled within addToDict
       translations: [],

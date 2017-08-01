@@ -18,13 +18,11 @@ describe('Test plural extraction', () => {
     assert.equal(extracted[t1].type, 'plural');
     assert.equal(extracted[t1].context, 'ctx1');
     assert.equal(extracted[t1].entry[0], 'Some text');
-    assert.equal(extracted[t1].entry[1], 'Some texts');
-    assert.equal(extracted[t1].entry[2], 'Some teksty');
+    assert.equal(extracted[t1].entry[1], 'Some teksty'); // last form
     assert.equal(extracted[t2].type, 'plural');
     assert.equal(extracted[t2].context, 'ctx2');
     assert.equal(extracted[t2].entry[0], 'Some text');
-    assert.equal(extracted[t2].entry[1], 'Some texts');
-    assert.equal(extracted[t2].entry[2], 'Some teksty');
+    assert.equal(extracted[t2].entry[1], 'Some teksty'); // last form
   });
 
   it('Extracts plural strings with valid simple placeholders', () => {
@@ -45,13 +43,11 @@ describe('Test plural extraction', () => {
     assert.equal(extracted[t1].type, 'plural');
     assert.equal(extracted[t1].context, 'ctx1');
     assert.equal(extracted[t1].entry[0], 'Some %% text');
-    assert.equal(extracted[t1].entry[1], 'Some %% texts');
-    assert.equal(extracted[t1].entry[2], 'Some %% teksty');
+    assert.equal(extracted[t1].entry[1], 'Some %% teksty'); // last form
     assert.equal(extracted[t2].type, 'plural');
     assert.equal(extracted[t2].context, 'ctx2');
     assert.equal(extracted[t2].entry[0], 'Some %% %2 more %1 text');
-    assert.equal(extracted[t2].entry[1], 'Some %% %2 more %1 texts');
-    assert.equal(extracted[t2].entry[2], 'Some %% %2 more %1 teksty');
+    assert.equal(extracted[t2].entry[1], 'Some %% %2 more %1 teksty'); // last form
   });
 
   it('Fails to extract invalid placeholders', () => {
