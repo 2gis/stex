@@ -21,7 +21,6 @@ function translate(d) {
             type: 'single',
             entry: tString.text,
             occurences: [],
-            translations: [],
             comments: comments
         };
         var key = utils_1.makeKey(entry);

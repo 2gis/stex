@@ -30,7 +30,6 @@ export function translate(d: Dict) {
       type: 'single',
       entry: (tString as ts.StringLiteral).text,
       occurences: [], // will be filled within addToDict
-      translations: [],
       comments
     };
 

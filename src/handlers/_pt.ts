@@ -38,7 +38,6 @@ export function translate(d: Dict) {
       entry: (tString as ts.StringLiteral).text,
       context: (context as ts.StringLiteral).text,
       occurences: [], // will be filled within addToDict
-      translations: [],
       comments
     };
 
