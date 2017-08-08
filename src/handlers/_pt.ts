@@ -10,8 +10,7 @@ export function translate(d: Dict) {
     let [
       context, /* comma */,
       tString, /* comma */,
-      args = null, /* comma */,
-      /* macros = null */ // Macros can't be checked in compile-time :(
+      args = null
     ] = signatureItems;
 
     // Checks

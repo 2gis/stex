@@ -9,8 +9,7 @@ export function translate(d: Dict) {
   return (signatureItems: ts.Node[], identInfo: IdentInfo, comments: string[]) => {
     let [
       tString, /* comma */,
-      args = null, /* comma */,
-      /* macros = null */ // Macros can't be checked in compile-time :(
+      args = null
     ] = signatureItems;
 
     // Checks

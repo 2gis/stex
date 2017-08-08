@@ -16,35 +16,29 @@ export type HTypes = keyof Handlers;
 export type Dict = { [key: string]: I18NEntry };
 export type Scalar = number | string | null | undefined;
 export type SubstitutionList = Scalar[];
-export type MacroParams = { [key: string]: Scalar };
-export type MacroParamsList = { [key: string]: MacroParams };
 
 // i18n globals
 
 // Mocks, these functions should not be implemented in extractor
 export const _t = (
   _str: string,
-  _substitutions: SubstitutionList = [],
-  _macroParams: MacroParamsList = {}
+  _substitutions: SubstitutionList = []
 ) => '';
 export const _pt = (
   _context: string,
   _str: string,
-  _substitutions: SubstitutionList = [],
-  _macroParams: MacroParamsList = {}
+  _substitutions: SubstitutionList = []
 ) => '';
 export const _nt = (
   _plurals: string[],
   _factor: number,
-  _substitutions: SubstitutionList = [],
-  _macroParams: MacroParamsList = {}
+  _substitutions: SubstitutionList = []
 ) => '';
 export const _npt = (
   _context: string,
   _plurals: string[],
   _factor: number,
-  _substitutions: SubstitutionList = [],
-  _macroParams: MacroParamsList = {}
+  _substitutions: SubstitutionList = []
 ) => '';
 
 export type SimpleTranslation = typeof _t;

@@ -18,8 +18,7 @@ export function translate(d: Dict) {
       context, /* comma */,
       plurals, /* comma */,
       factor, /* comma */,
-      args = null, /* comma */,
-      /* macros = null */ // Macros can't be checked in compile-time :(
+      args = null
     ] = signatureItems;
 
     // Checks
