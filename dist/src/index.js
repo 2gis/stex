@@ -56,8 +56,9 @@ function extract(sourceFile) {
 }
 exports.extract = extract;
 function getDictItems() {
-    return Object.keys(dict).map(function (key) { return dict[key]; });
-    ;
+    return {
+        items: Object.keys(dict).map(function (key) { return dict[key]; })
+    };
 }
 exports.getDictItems = getDictItems;
 function getDict() {

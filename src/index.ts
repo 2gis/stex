@@ -3,6 +3,7 @@ import { HTypes, Dict } from './types';
 import { getHandlers } from './handlers';
 export { overridePanic } from './handlers';
 import { CommentHandle } from './commentExtractor';
+import { TranslationJson } from 'i18n-proto';
 
 let dict: Dict = {};
 let handlers = getHandlers(dict);
@@ -55,8 +56,10 @@ export function extract(sourceFile: ts.SourceFile) {
   }
 }
 
-export function getDictItems() {
-  return Object.keys(dict).map((key) => dict[key]);;
+export function getDictItems(): TranslationJson {
+  return {
+    items: Object.keys(dict).map((key) => dict[key])
+  };
 }
 
 export function getDict() {
