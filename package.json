@@ -1,6 +1,6 @@
 {
   "name": "i18n-stex",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "i18n STrings EXtractor",
   "main": "dist/index.js",
   "scripts": {
@@ -38,12 +38,12 @@
     "tslib": "1.5.0",
     "tslint": "4.3.1",
     "tslint-eslint-rules": "3.2.3",
-    "typescript": "^2.4.1",
     "uglify-js": "3.0.18",
     "watchify": "^3.9.0"
   },
   "dependencies": {
     "cli": "^1.0.1",
+    "typescript": "^2.4.1",
     "glob": "^7.1.2"
   }
 }
