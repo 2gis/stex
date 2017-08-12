@@ -25,6 +25,27 @@ describe('Test plural extraction', () => {
     assert.equal(extracted[t2].entry[1], 'Some more teksty'); // last form
   });
 
+  it.only('Extracts plural strings with expressions as parameters', () => {
+    function simple() {
+      let n = { a: { b: 1 } }; // nested object expression
+      let a = _nt(['Some text', 'Some texts', 'Some teksty'], n.a.b);
+      let b = _nt(['Some more text', 'Some more texts', 'Some more teksty'], n.a.b);
+      return { a, b };
+    }
+
+    let extracted = getExtractedStrings(simple);
+    assert.equal(Object.keys(extracted).length, 2);
+    let [t1, t2] = Object.keys(extracted);
+    assert.equal(extracted[t1].type, 'plural');
+    assert.equal(extracted[t1].context, undefined);
+    assert.equal(extracted[t1].entry[0], 'Some text');
+    assert.equal(extracted[t1].entry[1], 'Some teksty'); // last form
+    assert.equal(extracted[t2].type, 'plural');
+    assert.equal(extracted[t2].context, undefined);
+    assert.equal(extracted[t2].entry[0], 'Some more text');
+    assert.equal(extracted[t2].entry[1], 'Some more teksty'); // last form
+  });
+
   it('Extracts plural strings with valid simple placeholders', () => {
     function simple() {
       let n = 1;

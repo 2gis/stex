@@ -28,6 +28,8 @@ function isValidQuantifier(node) {
         ts.SyntaxKind.PrefixUnaryExpression,
         ts.SyntaxKind.BinaryExpression,
         ts.SyntaxKind.CallExpression,
+        ts.SyntaxKind.PropertyAccessExpression,
+        ts.SyntaxKind.ElementAccessExpression,
         ts.SyntaxKind.ConditionalExpression
     ].indexOf(node.kind) !== -1;
 }
