@@ -22,6 +22,9 @@ glob(options.src, function (e, matches) {
         return;
     }
     matches.forEach(function (fileName) {
+        if (fileName.indexOf('node_modules') !== -1) {
+            return;
+        }
         src_1.extract(ts.createSourceFile(fileName, fs_1.readFileSync(fileName).toString(), ts.ScriptTarget.ES5, 
         /*setParentNodes */ true));
     });

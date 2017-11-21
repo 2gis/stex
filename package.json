@@ -1,6 +1,6 @@
 {
   "name": "i18n-stex",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "i18n STrings EXtractor",
   "main": "dist/index.js",
   "scripts": {

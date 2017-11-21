@@ -33,6 +33,9 @@ glob(options.src, (e: Error, matches: string[]) => {
   }
 
   matches.forEach((fileName) => {
+    if (fileName.indexOf('node_modules') !== -1) {
+      return;
+    }
     extract(ts.createSourceFile(
       fileName,
       readFileSync(fileName).toString(),
