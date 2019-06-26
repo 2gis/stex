@@ -1,7 +1,5 @@
 import * as assert from 'assert';
 import { getExtractedStrings } from './util';
-import { _t } from '../src/types';
-import { IdentInfo } from 'i18n-proto';
 
 describe('Test comment extraction edge cases', () => {
   it('Extracts multiline comments', () => {
@@ -22,6 +20,60 @@ describe('Test comment extraction edge cases', () => {
     assert.equal(extracted['Some text and more text ololo'].comments[0], 'Some comment');
     assert.equal(extracted['Some text and more text ololo'].comments[1], 'Comment on new line');
     assert.equal(extracted['Some text and more text ololo'].comments[2], 'And third comment too');
+  });
+
+  it('Extracts comment inside jsx', () => {
+    let simple = `
+      <>
+        <div>
+          {// ; Reset something
+          i18n.tp._t('Reset')}
+        </div>
+        <div>
+          { //; Done something
+          //; some comment down
+          i18n.tp._t('Done')}
+        </div>
+        <div>
+          { // Some comment
+          'Some text'}
+        </div>
+        <div>
+          {/*; First level comment */}
+          {/*; Second level comment */}
+          i18n.tp._t('Close')}
+        </div>
+      </>
+    `;
+
+    let extracted = getExtractedStrings(simple);
+    assert.equal(Object.keys(extracted).length, 3);
+    assert.equal(extracted['Reset'].comments.length, 1);
+    assert.equal(extracted['Reset'].comments[0], 'Reset something');
+    assert.equal(extracted['Done'].comments.length, 2);
+    assert.equal(extracted['Done'].comments[0], 'Done something');
+    assert.equal(extracted['Done'].comments[1], 'some comment down');
+    assert.equal(extracted['Done'].comments.length, 2);
+    assert.equal(extracted['Close'].comments[0], 'First level comment');
+    assert.equal(extracted['Close'].comments[1], 'Second level comment');
+  });
+
+  it('Extracts comment inside ternary operator', () => {
+    let simple = `
+      const buttonLabel =
+        type === 'condition'
+          ? // ; OK text
+            i18n.tp._t('OK')
+          : // ; Cancel text
+            i18n.tp._t('Cancel');
+    `;
+
+    let extracted = getExtractedStrings(simple);
+    assert.equal(Object.keys(extracted).length, 2);
+    assert.equal(extracted['OK'].comments.length, 1);
+    assert.equal(extracted['OK'].comments[0], 'OK text');
+    assert.equal(extracted['Cancel'].comments.length, 1);
+    assert.equal(extracted['Cancel'].comments[0], 'Cancel text');
   });
 
   it('Aborts comment parsing if any other line is encountered', () => {

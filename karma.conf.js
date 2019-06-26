@@ -34,7 +34,7 @@ module.exports = function(config) {
 
     typescriptPreprocessor: {
       tsconfigPath: './tsconfig.json',
-      ignorePath: function(path){ 
+      ignorePath: function(path) {
        return /\.d\.ts$/.test(path);
       }
     },

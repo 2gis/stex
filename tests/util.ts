@@ -1,4 +1,4 @@
-import * as ts from "typescript";
+import * as ts from 'typescript';
 import { extract, getDict, clearDict, overridePanic } from '../src/';
 import { IdentInfo } from 'i18n-proto';
 

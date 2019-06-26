@@ -1,4 +1,4 @@
-import * as ts from "typescript";
+import * as ts from 'typescript';
 import { HTypes, Dict } from './types';
 import { getHandlers } from './handlers';
 export { overridePanic } from './handlers';

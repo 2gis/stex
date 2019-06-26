@@ -25,7 +25,7 @@ describe('Test plural extraction', () => {
     assert.equal(extracted[t2].entry[1], 'Some more teksty'); // last form
   });
 
-  it.only('Extracts plural strings with expressions as parameters', () => {
+  it('Extracts plural strings with expressions as parameters', () => {
     function simple() {
       let n = { a: { b: 1 } }; // nested object expression
       let a = _nt(['Some text', 'Some texts', 'Some teksty'], n.a.b);

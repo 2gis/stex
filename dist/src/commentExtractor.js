@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-var CommentHandle = (function () {
+var CommentHandle = /** @class */ (function () {
     function CommentHandle() {
         this.comments = {};
     }
@@ -11,14 +11,15 @@ var CommentHandle = (function () {
         this.comments[filename][lineNumber] = str;
     };
     CommentHandle.prototype.extractRawComments = function (src, filename) {
-        var lines = src.split("\n"); // No regex here! We should precisely keep line numbers.
+        var lines = src.split('\n'); // No regex here! We should precisely keep line numbers.
         for (var line = 0; line < lines.length; line++) {
-            if (lines[line].match(/^\s*\/\/\s?;/)) {
-                this.addComment(lines[line].replace(/^\s*\/\/\s?;\s*|\s*$/g, ''), filename, line); // trim & add
+            var trimmedLine = lines[line].trim();
+            if (trimmedLine.split(/\s*\/\/\s?;\s*|\s*$/g)[1]) { // single line //; or // ; comments
+                this.addComment(trimmedLine.split(/\s*\/\/\s?;\s*|\s*$/g)[1], filename, line); // trim & add
                 continue;
             }
-            if (lines[line].match(/^\s*\{?\s*\/\*\s?;(.+?)\s*\*\/\s*\}?\s*$/)) {
-                this.addComment(lines[line].replace(/^\s*\{?\s*\/\*\s?;\s*|\s*\*\/\s*\}?\s*$/g, ''), filename, line); // trim & add
+            if (trimmedLine.match(/^\s*\{?\s*\/\*\s?;(.+?)\s*\*\/\s*\}?\s*$/)) { // single line /*; comments */, also support {} for TSX
+                this.addComment(trimmedLine.replace(/^\s*\{?\s*\/\*\s?;\s*|\s*\*\/\s*\}?\s*$/g, ''), filename, line); // trim & add
                 continue;
             }
         }

@@ -1,4 +1,4 @@
-import * as ts from "typescript";
+import * as ts from 'typescript';
 import { Dict } from '../types';
 import { IdentInfo, PluralI18NEntry } from 'i18n-proto';
 import { panic } from './';
