@@ -1,4 +1,4 @@
-import * as ts from "typescript";
+import * as ts from 'typescript';
 import { IdentInfo, I18NEntry } from 'i18n-proto';
 
 export type Handlers = {

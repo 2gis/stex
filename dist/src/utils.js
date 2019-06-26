@@ -72,11 +72,11 @@ function validateSinglePlaceholder(args, tString) {
 }
 exports.validateSinglePlaceholder = validateSinglePlaceholder;
 function addToDict(d, key, entry, occurence) {
-    if (d[key]) {
+    if (d[key]) { // have this key -> just append comments & occurences; comments should be deduplicated
         d[key].comments = d[key].comments.concat(entry.comments)
             .filter(function (value, index, self) { return self.indexOf(value) === index; });
     }
-    else {
+    else { // new key -> add it
         d[key] = entry;
     }
     d[key].occurences.push(

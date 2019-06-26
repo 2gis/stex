@@ -1,4 +1,4 @@
-import * as ts from "typescript";
+import * as ts from 'typescript';
 import { I18NEntry, IdentInfo } from 'i18n-proto';
 import { Dict } from './types';
 

@@ -1,4 +1,4 @@
-import * as ts from "typescript";
+import * as ts from 'typescript';
 import { IdentInfo, SingleI18NEntry } from 'i18n-proto';
 import { Dict } from '../types';
 import { validateSinglePlaceholder, makeKey, addToDict } from '../utils';
