@@ -1,0 +1,30 @@
+name: Unit tests, static analysis, code style
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  checkPr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'yarn'
+
+      - name: Install packages
+        run: yarn install --prefer-offline --frozen-lockfile
+
+      - name: Run all lints and tests
+        run:
+          yarn lint
+          yarn typecheck
+          yarn test
+
+      - name: Stop containers
+        if: always()
+        run: make pantheon_stop
+

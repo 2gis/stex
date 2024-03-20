@@ -14,7 +14,7 @@ import {
 // Plural contextual translation
 export function translate(d: Dict) {
   return (signatureItems: ts.Node[], identInfo: IdentInfo, comments: string[]) => {
-    let [
+    const [
       context, /* comma */,
       plurals, /* comma */,
       factor, /* comma */,
@@ -37,13 +37,13 @@ export function translate(d: Dict) {
       return;
     }
 
-    let list = getArrayListNode(plurals);
+    const list = getArrayListNode(plurals);
     if (!list) {
       panic('_nt: parameter #0 (plurality strings) should be an array literal', identInfo);
       return;
     }
 
-    let { items, strings } = getArrayListElements(list);
+    const { items, strings } = getArrayListElements(list);
     if (items.length !== strings.length) {
       panic('_npt: parameter #1 (plurality strings) should contain only string literals', identInfo);
       return;

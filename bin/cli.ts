@@ -33,7 +33,7 @@ glob(options.src, (e: Error, matches: string[]) => {
   }
 
   matches.forEach((fileName) => {
-    if (fileName.indexOf('node_modules') !== -1) {
+    if (fileName.includes('node_modules')) {
       return;
     }
     extract(ts.createSourceFile(

@@ -7,7 +7,7 @@ import { panic } from './';
 // Contextual translation
 export function translate(d: Dict) {
   return (signatureItems: ts.Node[], identInfo: IdentInfo, comments: string[]) => {
-    let [
+    const [
       context, /* comma */,
       tString, /* comma */,
       args = null

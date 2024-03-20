@@ -34,13 +34,13 @@ export function isValidQuantifier(node: ts.Node): boolean {
     ts.SyntaxKind.PropertyAccessExpression,
     ts.SyntaxKind.ElementAccessExpression,
     ts.SyntaxKind.ConditionalExpression
-  ].indexOf(node.kind) !== -1;
+  ].includes(node.kind);
 }
 
 export function getArrayListNode(node: ts.Node): ts.Node | null {
   return node.getChildren().reduce(
     (acc: ts.Node | null, val: ts.Node) => {
-      if (acc || val.kind !== ts.SyntaxKind.SyntaxList) {
+      if (val.kind !== ts.SyntaxKind.SyntaxList || acc) {
         return acc;
       }
       return val;
@@ -49,9 +49,9 @@ export function getArrayListNode(node: ts.Node): ts.Node | null {
   );
 }
 
-export function getArrayListElements(node: ts.Node): { items: ts.Node[], strings: string[] } {
-  let items: ts.Node[] = node.getChildren().filter((c) => c.kind !== ts.SyntaxKind.CommaToken);
-  let strings: string[] = (items as ts.StringLiteral[])
+export function getArrayListElements(node: ts.Node): { items: ts.Node[]; strings: string[] } {
+  const items: ts.Node[] = node.getChildren().filter((c) => c.kind !== ts.SyntaxKind.CommaToken);
+  const strings: string[] = (items as ts.StringLiteral[])
     .filter((c: ts.Node) => c.kind === ts.SyntaxKind.StringLiteral)
     .map((c: ts.StringLiteral) => c.text);
   return { items, strings };
@@ -60,9 +60,9 @@ export function getArrayListElements(node: ts.Node): { items: ts.Node[], strings
 export function validatePluralPlaceholders(args: ts.Node | null, strings: string[]) {
   const argList = args ? getArrayListNode(args) : null;
   const argIdents = argList ? filterArgs(argList.getChildren()) : [];
-  let argPlaceholders: { [key: string]: any } = {};
-  for (let sl of strings) {
-    (sl.match(/(%\d)/g) || []).forEach((i) => {
+  const argPlaceholders: { [key: string]: any } = {};
+  for (const sl of strings) {
+    (sl.match(/(%\d)/g) ?? []).forEach((i) => {
       argPlaceholders[i] = true;
     });
   }
@@ -73,19 +73,19 @@ export function validatePluralPlaceholders(args: ts.Node | null, strings: string
 export function validateSinglePlaceholder(args: ts.Node | null, tString: ts.StringLiteral) {
   const argList = args ? getArrayListNode(args) : null;
   const argIdents = argList ? filterArgs(argList.getChildren()) : [];
-  const argPlaceholders = tString.text.match(/(%\d)/g) || [];
+  const argPlaceholders = tString.text.match(/(%\d)/g) ?? [];
   return argIdents.length === argPlaceholders.length;
 }
 
 export function addToDict(d: Dict, key: string, entry: I18NEntry, occurence: IdentInfo) {
   if (d[key]) { // have this key -> just append comments & occurences; comments should be deduplicated
-    d[key].comments = d[key].comments.concat(entry.comments)
+    d[key].comments = d[key].comments?.concat(entry.comments ?? '')
       .filter((value, index, self) => self.indexOf(value) === index);
   } else { // new key -> add it
     d[key] = entry;
   }
 
-  d[key].occurences.push(
+  d[key].occurences?.push(
     // +1 to char & line, because they're counted from 0 inside
     `${occurence.identFile}:${occurence.identLocation.line + 1}:${occurence.identLocation.character + 1}`
   );

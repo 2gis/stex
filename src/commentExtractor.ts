@@ -3,8 +3,8 @@ import { IdentInfo } from 'i18n-proto';
 export class CommentHandle {
   private comments: {
     [key: string]: { // filename in key
-      [key: number]: string // line number in key
-    }
+      [key: number]: string; // line number in key
+    };
   } = {};
 
   private addComment(str: string, filename: string, lineNumber: number): void {
@@ -16,7 +16,7 @@ export class CommentHandle {
   }
 
   public extractRawComments(src: string, filename: string): CommentHandle {
-    let lines = src.split("\n"); // No regex here! We should precisely keep line numbers.
+    const lines = src.split("\n"); // No regex here! We should precisely keep line numbers.
     for (let line = 0; line < lines.length; line++) {
       if (lines[line].match(/^\s*\/\/\s?;/)) { // single line //; or // ; comments
         this.addComment(lines[line].replace(/^\s*\/\/\s?;\s*|\s*$/g, ''), filename, line); // trim & add
@@ -25,7 +25,6 @@ export class CommentHandle {
 
       if (lines[line].match(/^\s*\{?\s*\/\*\s?;(.+?)\s*\*\/\s*\}?\s*$/)) { // single line /*; comments */, also support {} for TSX
         this.addComment(lines[line].replace(/^\s*\{?\s*\/\*\s?;\s*|\s*\*\/\s*\}?\s*$/g, ''), filename, line); // trim & add
-        continue;
       }
     }
 
@@ -37,8 +36,9 @@ export class CommentHandle {
       return [];
     }
 
-    let comments: string[] = [];
+    const comments: string[] = [];
     let currentLine = pos.identLocation.line;
+    // eslint-disable-next-line no-constant-condition
     while (true) {
       currentLine--;
 

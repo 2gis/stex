@@ -14,7 +14,7 @@ import {
 // Plural translation
 export function translate(d: Dict) {
   return (signatureItems: ts.Node[], identInfo: IdentInfo, comments: string[]) => {
-    let [
+    const [
       plurals, /* comma */,
       factor, /* comma */,
       args = null
@@ -31,13 +31,13 @@ export function translate(d: Dict) {
       return;
     }
 
-    let list = getArrayListNode(plurals);
+    const list = getArrayListNode(plurals);
     if (!list) {
       panic('_nt: parameter #0 (plurality strings) should be an array literal', identInfo);
       return;
     }
 
-    let { items, strings } = getArrayListElements(list);
+    const { items, strings } = getArrayListElements(list);
     if (items.length !== strings.length) {
       panic('_nt: parameter #0 (plurality strings) should contain only strings', identInfo);
       return;

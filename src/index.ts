@@ -5,11 +5,11 @@ export { overridePanic } from './handlers';
 import { CommentHandle } from './commentExtractor';
 import { TranslationJson } from 'i18n-proto';
 
-let dict: Dict = {};
-let handlers = getHandlers(dict);
+const dict: Dict = {};
+const handlers = getHandlers(dict);
 
 export function extract(sourceFile: ts.SourceFile) {
-  let commentHandle = (new CommentHandle())
+  const commentHandle = (new CommentHandle())
     .extractRawComments(sourceFile.getFullText(), sourceFile.fileName);
   extractNode(sourceFile);
 
@@ -20,7 +20,10 @@ export function extract(sourceFile: ts.SourceFile) {
         let params;
         let identLocation;
         let identFile;
-        for (let c of node.getChildren()) {
+
+        // шото с обходом AST, понять что не так - скорее всего что-то в typescript api поменялось
+
+        for (const c of node.getChildren()) {
           switch (c.kind) {
             case ts.SyntaxKind.PropertyAccessExpression:
               // no filter by object name, might be useful with transpiled sources
@@ -44,7 +47,7 @@ export function extract(sourceFile: ts.SourceFile) {
           const handler = handlers[ident as HTypes];
           if (handler) {
             const pos = { identLocation, identFile };
-            handler(params || [], pos, commentHandle.findAdjacentComments(pos));
+            handler(params ?? [], pos, commentHandle.findAdjacentComments(pos));
           }
         } else {
           ts.forEachChild(node, extractNode);
@@ -67,7 +70,7 @@ export function getDict() {
 }
 
 export function clearDict() {
-  for (let i in dict) {
+  for (const i in dict) {
     delete dict[i];
   }
 }

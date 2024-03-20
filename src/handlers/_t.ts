@@ -7,7 +7,7 @@ import { panic } from './';
 // Simple translation
 export function translate(d: Dict) {
   return (signatureItems: ts.Node[], identInfo: IdentInfo, comments: string[]) => {
-    let [
+    const [
       tString, /* comma */,
       args = null
     ] = signatureItems;
