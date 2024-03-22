@@ -29,8 +29,3 @@ jobs:
       - name: Run unit tests
         run:
           yarn test
-
-      - name: Stop containers
-        if: always()
-        run: make pantheon_stop
-
