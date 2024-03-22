@@ -7,8 +7,8 @@
   "scripts": {
     "lint": "eslint . --ext .js,.ts,.tsx",
     "test": "jest",
-    "typecheck": "tsc bin/cli.ts --noEmit",
-    "build": "tsc bin/cli.ts --outDir dist"
+    "typecheck": "tsc -p . --noEmit",
+    "build": "tsc -p . --outDir dist"
   },
   "keywords": [
     "i18n"
