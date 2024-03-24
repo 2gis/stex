@@ -1,6 +1,6 @@
 {
   "name": "i18n-stex",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "i18n STrings EXtractor",
   "main": "dist/index.js",
   "scripts": {
@@ -33,21 +33,21 @@
     "@types/node": "^20.11.30",
     "@typescript-eslint/eslint-plugin": "6.21.0",
     "@typescript-eslint/parser": "6.21.0",
-    "cli": "^1.0.1",
     "cross-env": "^7.0.3",
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-unused-imports": "3.0.0",
-    "glob": "^8.1.0",
     "i18n-proto": "1.0.5",
     "jest": "^29.7.0",
     "prettier": "3.2.5",
     "ts-jest": "^29.1.2",
-    "ts-node": "^10.9.2",
-    "tslib": "2.6.2",
-    "typescript": "5.3.3"
+    "ts-node": "^10.9.2"
   },
   "dependencies": {
-    "@types/glob": "^8.1.0"
+    "@types/glob": "^8.1.0",
+    "cli": "^1.0.1",
+    "glob": "^8.1.0",
+    "tslib": "2.6.2",
+    "typescript": "5.3.3"
   }
 }
