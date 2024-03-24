@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from 'fs';
 import * as ts from "typescript";
 import { extract, getDictItems } from '../src';
-import { globSync } from 'glob';
+import glob from 'glob';
 import * as cli from 'cli';
 
 const options = cli.parse({
@@ -26,21 +26,26 @@ Options:
 
 console.warn('Running extraction in glob: ', options.src);
 
-const matches = globSync(options.src);
-matches.forEach((fileName) => {
-  if (fileName.includes('node_modules')) {
-    return;
-  }
-  extract(ts.createSourceFile(
-    fileName,
-    readFileSync(fileName).toString(),
-    ts.ScriptTarget.ES5,
-    /*setParentNodes */ true
-  ));
-});
+glob(options.src, (e, matches) => {
+  matches.forEach((fileName) => {
+    if (fileName.includes('node_modules')) {
+      return;
+    }
+    extract(ts.createSourceFile(
+      fileName,
+      readFileSync(fileName).toString(),
+      ts.ScriptTarget.ES5,
+      /*setParentNodes */ true
+    ));
+  });
 
-if (options.output === '__stdout') {
-  console.log(JSON.stringify(getDictItems(), undefined, '  '));
-} else {
-  writeFileSync(options.output, JSON.stringify(getDictItems(), undefined, '  '));
-}
+  if (options.output === '__stdout') {
+    console.log(JSON.stringify(getDictItems(), undefined, '  '));
+  } else {
+    writeFileSync(options.output, JSON.stringify(getDictItems(), undefined, '  '));
+  }
+
+  if (e) {
+    console.error(e);
+  }
+});

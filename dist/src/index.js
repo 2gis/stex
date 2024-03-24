@@ -1,22 +1,28 @@
-import * as ts from "typescript";
-import { getHandlers } from './handlers';
-export { overridePanic } from './handlers';
-import { CommentHandle } from './commentExtractor';
-const dict = {};
-const handlers = getHandlers(dict);
-export function extract(sourceFile) {
-    const commentHandle = (new CommentHandle())
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.clearDict = exports.getDict = exports.getDictItems = exports.extract = exports.overridePanic = void 0;
+var tslib_1 = require("tslib");
+var ts = tslib_1.__importStar(require("typescript"));
+var handlers_1 = require("./handlers");
+var handlers_2 = require("./handlers");
+Object.defineProperty(exports, "overridePanic", { enumerable: true, get: function () { return handlers_2.overridePanic; } });
+var commentExtractor_1 = require("./commentExtractor");
+var dict = {};
+var handlers = (0, handlers_1.getHandlers)(dict);
+function extract(sourceFile) {
+    var commentHandle = (new commentExtractor_1.CommentHandle())
         .extractRawComments(sourceFile.getFullText(), sourceFile.fileName);
     extractNode(sourceFile);
     function extractNode(node) {
         switch (node.kind) {
             case ts.SyntaxKind.CallExpression:
-                let ident;
-                let params;
-                let identLocation;
-                let identFile;
+                var ident = void 0;
+                var params = void 0;
+                var identLocation = void 0;
+                var identFile = void 0;
                 // шото с обходом AST, понять что не так - скорее всего что-то в typescript api поменялось
-                for (const c of node.getChildren()) {
+                for (var _i = 0, _a = node.getChildren(); _i < _a.length; _i++) {
+                    var c = _a[_i];
                     switch (c.kind) {
                         case ts.SyntaxKind.PropertyAccessExpression:
                             // no filter by object name, might be useful with transpiled sources
@@ -36,10 +42,10 @@ export function extract(sourceFile) {
                     }
                 }
                 if (ident && identFile && identLocation && handlers.hasOwnProperty(ident)) {
-                    const handler = handlers[ident];
+                    var handler = handlers[ident];
                     if (handler) {
-                        const pos = { identLocation, identFile };
-                        handler(params ?? [], pos, commentHandle.findAdjacentComments(pos));
+                        var pos = { identLocation: identLocation, identFile: identFile };
+                        handler(params !== null && params !== void 0 ? params : [], pos, commentHandle.findAdjacentComments(pos));
                     }
                 }
                 else {
@@ -51,17 +57,21 @@ export function extract(sourceFile) {
         }
     }
 }
-export function getDictItems() {
+exports.extract = extract;
+function getDictItems() {
     return {
-        items: Object.keys(dict).map((key) => dict[key])
+        items: Object.keys(dict).map(function (key) { return dict[key]; })
     };
 }
-export function getDict() {
+exports.getDictItems = getDictItems;
+function getDict() {
     return dict;
 }
-export function clearDict() {
-    for (const i in dict) {
+exports.getDict = getDict;
+function clearDict() {
+    for (var i in dict) {
         delete dict[i];
     }
 }
+exports.clearDict = clearDict;
 //# sourceMappingURL=index.js.map

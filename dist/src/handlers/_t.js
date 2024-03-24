@@ -1,28 +1,33 @@
-import * as ts from "typescript";
-import { validateSinglePlaceholder, makeKey, addToDict } from '../utils';
-import { panic } from './';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.translate = void 0;
+var tslib_1 = require("tslib");
+var ts = tslib_1.__importStar(require("typescript"));
+var utils_1 = require("../utils");
+var _1 = require("./");
 // Simple translation
-export function translate(d) {
-    return (signatureItems, identInfo, comments) => {
-        const [tString, /* comma */ , args = null] = signatureItems;
+function translate(d) {
+    return function (signatureItems, identInfo, comments) {
+        var tString = signatureItems[0], _a = signatureItems[2], args = _a === void 0 ? null : _a;
         // Checks
         if (tString.kind != ts.SyntaxKind.StringLiteral) {
-            panic('_t: parameter #0 should be a string literal', identInfo);
+            (0, _1.panic)('_t: parameter #0 should be a string literal', identInfo);
             return;
         }
-        if (!validateSinglePlaceholder(args, tString)) {
-            panic('_t: optional arguments count mismatch', identInfo);
+        if (!(0, utils_1.validateSinglePlaceholder)(args, tString)) {
+            (0, _1.panic)('_t: optional arguments count mismatch', identInfo);
             return;
         }
         // All ok, add to dict
-        const entry = {
+        var entry = {
             type: 'single',
             entry: tString.text,
             occurences: [], // will be filled within addToDict
-            comments
+            comments: comments
         };
-        const key = makeKey(entry);
-        addToDict(d, key, entry, identInfo);
+        var key = (0, utils_1.makeKey)(entry);
+        (0, utils_1.addToDict)(d, key, entry, identInfo);
     };
 }
+exports.translate = translate;
 //# sourceMappingURL=_t.js.map
