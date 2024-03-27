@@ -89,5 +89,10 @@ describe('Test simple extraction', function () {
         assert.strictEqual(extracted['Some text and more text ololo'].entry, 'Some text and more text ololo');
         assert.strictEqual((_a = extracted['Some text and more text ololo'].comments) === null || _a === void 0 ? void 0 : _a[0], 'Some tsx comment');
     });
+    it('Extracts nested i18n expressions', function () {
+        var string = "\n      export const makeLog = () => {\n        return i18n._pt('Item', 'Translation %1 %2 %3', [\n              1,\n              somevar === 4\n                ? i18n._t('valid')\n                : somefunc() || i18n._t('invalid'),\n              3\n            ]);\n          }\n        });\n      };\n      ";
+        var extracted = (0, util_1.getExtractedStrings)(string);
+        assert.strictEqual(Object.keys(extracted).length, 3);
+    });
 });
 //# sourceMappingURL=simple_t.spec.js.map

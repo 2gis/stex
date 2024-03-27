@@ -20,7 +20,6 @@ function extract(sourceFile) {
                 var params = void 0;
                 var identLocation = void 0;
                 var identFile = void 0;
-                // шото с обходом AST, понять что не так - скорее всего что-то в typescript api поменялось
                 for (var _i = 0, _a = node.getChildren(); _i < _a.length; _i++) {
                     var c = _a[_i];
                     switch (c.kind) {
@@ -48,9 +47,7 @@ function extract(sourceFile) {
                         handler(params !== null && params !== void 0 ? params : [], pos, commentHandle.findAdjacentComments(pos));
                     }
                 }
-                else {
-                    ts.forEachChild(node, extractNode);
-                }
+                ts.forEachChild(node, extractNode);
                 break;
             default:
                 ts.forEachChild(node, extractNode);
