@@ -21,8 +21,6 @@ export function extract(sourceFile: ts.SourceFile) {
         let identLocation;
         let identFile;
 
-        // шото с обходом AST, понять что не так - скорее всего что-то в typescript api поменялось
-
         for (const c of node.getChildren()) {
           switch (c.kind) {
             case ts.SyntaxKind.PropertyAccessExpression:
@@ -49,9 +47,9 @@ export function extract(sourceFile: ts.SourceFile) {
             const pos = { identLocation, identFile };
             handler(params ?? [], pos, commentHandle.findAdjacentComments(pos));
           }
-        } else {
-          ts.forEachChild(node, extractNode);
         }
+
+        ts.forEachChild(node, extractNode);
         break;
       default:
         ts.forEachChild(node, extractNode);

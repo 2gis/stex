@@ -151,4 +151,22 @@ describe('Test simple extraction', () => {
     assert.strictEqual(extracted['Some text and more text ololo'].entry, 'Some text and more text ololo');
     assert.strictEqual(extracted['Some text and more text ololo'].comments?.[0], 'Some tsx comment');
   });
+
+  it('Extracts nested i18n expressions', () => {
+    const string = `
+      export const makeLog = () => {
+        return i18n._pt('Item', 'Translation %1 %2 %3', [
+              1,
+              somevar === 4
+                ? i18n._t('valid')
+                : somefunc() || i18n._t('invalid'),
+              3
+            ]);
+          }
+        });
+      };
+      `;
+    const extracted = getExtractedStrings(string);
+    assert.strictEqual(Object.keys(extracted).length, 3);
+  });
 });
